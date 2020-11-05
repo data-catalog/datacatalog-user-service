@@ -5,6 +5,7 @@ plugins {
 	id 'java'
 	id 'application'
 	id 'maven'
+	id 'com.google.cloud.tools.jib' version '2.6.0'
 }
 
 group = 'edu.bbte.projectblueblook'
@@ -19,7 +20,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	// implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -51,3 +52,5 @@ openApiGenerate {
 	generatorName = "spring"
 	validateSpec = false
 }
+
+
