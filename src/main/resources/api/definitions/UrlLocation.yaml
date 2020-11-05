@@ -1,0 +1,13 @@
+title: UrlLocation
+description: Location model for the URL location type. Contains a URL endpoint where the asset is located.
+allOf:
+  - $ref: ./Location.yaml
+  - type: object
+    properties:
+      url:
+        type: string
+        format: uri
+        description: |
+          The URL where the asset is located.
+    required:
+      - url
