@@ -27,6 +27,10 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
+          - task: CopyFiles@2
+            inputs:
+              contents: '_buildOutput/**'
+              targetFolder: '$(Build.ArtifactStagingDirectory)'
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -36,7 +40,7 @@ stages:
     jobs:
       - job: Deploy
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'vs2017-win2016'
 
         steps:
           - task: DownloadBuildArtifacts@0
