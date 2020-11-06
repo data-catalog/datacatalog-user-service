@@ -1,6 +1,7 @@
-# Docker
-# Build and push an image to Azure Container Registry
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# Gradle
+# Build your Java project and run tests with Gradle using a Gradle wrapper script.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
   - master
@@ -12,8 +13,8 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'e68d3a30-597e-49ec-bbfc-e77308d7efb8'
-  imageRepository: 'userhandlerimg'
+  dockerRegistryServiceConnection: '06046804-b5c0-4f1e-bf4d-f29c9467eb3c'
+  imageRepository: 'userhandleimg'
   containerRegistry: 'datacatalogregistry.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -22,26 +23,24 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-  -stage: Assemble
+  - stage: Build
     jobs:
-      job: Assemble
-      pool:
-        vmImage: 'ubuntu-latest'
+      - job: Build
+        pool:
+          vmImage: 'ubuntu-latest'
 
-      steps:
-        - task: Gradle@2
-          inputs:
-            workingDirectory: ''
-            gradleWrapperFile: 'gradlew'
-            gradleOptions: '-Xmx3072m'
-            javaHomeOption: 'JDKVersion'
-            jdkVersionOption: '1.11'
-            jdkArchitectureOption: 'x64'
-            publishJUnitResults: true
-            testResultsFiles: '**/TEST-*.xml'
-            tasks: 'assemble'
-
-
+        steps:
+          - task: Gradle@2
+            inputs:
+              workingDirectory: ''
+              gradleWrapperFile: 'gradlew'
+              gradleOptions: '-Xmx3072m'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.11'
+              jdkArchitectureOption: 'x64'
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              tasks: 'assemble'
   - stage: Build
     displayName: Build and push stage
     jobs:
