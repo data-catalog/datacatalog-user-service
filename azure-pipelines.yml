@@ -29,8 +29,8 @@ stages:
               tasks: 'assemble'
           - task: CopyFiles@2
             inputs:
-              SourceFolder: '$(Agent.BuildDirectory)'
-              Contents: '**/*.war'
+              SourceFolder: '/home/vsts/work/1/s/build/libs/'
+              Contents: '*'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
           - task: PublishBuildArtifacts@1
             inputs:
