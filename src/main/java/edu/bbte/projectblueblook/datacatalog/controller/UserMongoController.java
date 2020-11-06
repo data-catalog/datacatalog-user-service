@@ -95,7 +95,7 @@ public class UserMongoController implements UserApi {
                 // ADD USER TO RESPONSE
                 UserResponse userResponse = new UserResponse();
                 userResponse.setUsername(username);
-                userResponse.setFirstName("John");
+                userResponse.setFirstName("Johnny");
                 response.setUser(userResponse);
 
 
