@@ -53,14 +53,3 @@ openApiGenerate {
 	validateSpec = false
 }
 
-//jib.to.image = 'datacatalogregistry.azurecr.io/testimg'
-jib {
-	to {
-		image = 'datacatalogregistry.azurecr.io/testimg'
-		auth {
-			username = 'datacatalog'
-			password = 'qettltKDKYk9HxNyzVcJ7NM6A0/3xCNP'
-		}
-	}
-}
-
