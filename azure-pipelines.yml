@@ -70,7 +70,7 @@ stages:
             inputs:
               command: buildAndPush
               repository: $(imageRepository)
-              dockerfile: '$(System.ArtifactsDirectory)/drop/*.jar'
+              dockerfile: $(dockerfilePath)
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
