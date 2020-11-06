@@ -54,6 +54,6 @@ stages:
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'datacalog-serviceconnnection'
-              appType: 'webAppLinux'
+              appType: 'webAppContainer'
               WebAppName: 'datacatalog-userhandlingservice'
               packageForLinux: '$(System.ArtifactsDirectory)/drop/*'
