@@ -53,10 +53,6 @@ stages:
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
-                azureSubscription: 'datacalog-serviceconnnection'
-                appType: 'webAppContainer'
-                WebAppName: 'datacatalog-userhandlingservice'
-                DockerNamespace: 'kecske'
-                DockerRepository: 'kecske'
-                DockerImageTag: 'kecske'
-                StartupCommand: 'kecske'
+              azureSubscription: 'datacalog-serviceconnnection'
+              appType: 'webAppContainer'
+              WebAppName: 'datacatalog-userhandlingservice'
