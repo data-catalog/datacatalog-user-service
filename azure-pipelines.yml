@@ -29,7 +29,7 @@ stages:
               tasks: 'assemble'
           - task: CopyFiles@2
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)'
+              SourceFolder: '$(Agent.BuildDirectory)'
               Contents: '**/*.war'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
           - task: PublishBuildArtifacts@1
