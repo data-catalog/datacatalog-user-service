@@ -45,4 +45,4 @@ stages:
             inputs:
               SourceFolder: '/home/vsts/work/1/s/build/libs/'
               Contents: '*'
-              TargetFolder: '/home/vsts/work/1/s/'
+              TargetFolder: '/home/vsts/work/1/s/target/'
