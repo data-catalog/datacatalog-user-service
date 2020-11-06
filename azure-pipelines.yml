@@ -41,12 +41,12 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-              
+
           - task: Docker@2
             inputs:
               command: buildAndPush
               repository: $(imageRepository)
-              dockerfile: $(dockerfile)
+              dockerfile:  '/home/vsts/work/1/s/Dockerfile'
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
