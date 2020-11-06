@@ -29,7 +29,7 @@ stages:
               tasks: 'assemble'
           - task: CopyFiles@2
             inputs:
-              contents: '_buildOutput/**'
+              contents: '**/*.war'
               targetFolder: '$(Build.ArtifactStagingDirectory)'
           - task: PublishBuildArtifacts@1
             inputs:
