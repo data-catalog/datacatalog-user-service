@@ -22,6 +22,26 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
+  -stage: Assemble
+    jobs:
+      job: Assemble
+      pool:
+        vmImage: 'ubuntu-latest'
+
+      steps:
+        - task: Gradle@2
+          inputs:
+            workingDirectory: ''
+            gradleWrapperFile: 'gradlew'
+            gradleOptions: '-Xmx3072m'
+            javaHomeOption: 'JDKVersion'
+            jdkVersionOption: '1.11'
+            jdkArchitectureOption: 'x64'
+            publishJUnitResults: true
+            testResultsFiles: '**/TEST-*.xml'
+            tasks: 'assemble'
+
+
   - stage: Build
     displayName: Build and push stage
     jobs:
