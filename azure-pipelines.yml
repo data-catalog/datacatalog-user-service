@@ -8,10 +8,24 @@ trigger:
   - develop
   - feature/*
 
+resources:
+  - repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '06046804-b5c0-4f1e-bf4d-f29c9467eb3c'
+  imageRepository: 'userhandleimg'
+  containerRegistry: 'datacatalogregistry.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
 stages:
-  - stage: Build
+  - stage: Assemble
     jobs:
-      - job: Build
+      - job: Assemble
         pool:
           vmImage: 'ubuntu-latest'
 
@@ -27,36 +41,13 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: '/home/vsts/work/1/s/build/libs/'
-              Contents: '*'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
-  - stage: Deploy
-    jobs:
-      - job: Deploy
-        pool:
-          vmImage: 'vs2017-win2016'
 
-        steps:
-          - task: DownloadBuildArtifacts@0
+          - task: Docker@2
             inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'
-              downloadPath: '$(System.ArtifactsDirectory)'
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'datacalog-serviceconnnection'
-              appType: 'webAppContainer'
-              WebAppName: 'datacatalog-userhandlingservice'
-              DockerNamespace: 'datacalogregistry'
-              DockerRepository: 'testimg'
-              DockerImageTag: 'latest'
-              packageForLinux: '$(System.ArtifactsDirectory)/drop/*'
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile:  '/home/vsts/work/1/s/Dockerfile'
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+
