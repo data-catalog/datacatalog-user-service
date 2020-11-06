@@ -56,3 +56,8 @@ stages:
               azureSubscription: 'datacalog-serviceconnnection'
               appType: 'webAppContainer'
               WebAppName: 'datacatalog-userhandlingservice'
+              DockerNamespace: 'samples'
+              DockerRepository: 'userhandler'
+              DockerImageTag: 'latest'
+              StartupCommand: 'catalina run'
+              packageForLinux: '$(System.ArtifactsDirectory)/drop/*'
