@@ -57,6 +57,6 @@ stages:
               appType: 'webAppContainer'
               WebAppName: 'datacatalog-userhandlingservice'
               DockerNamespace: 'datacalogregistry'
-              DockerRepository: 'new'
+              DockerRepository: 'testimg'
               DockerImageTag: 'latest'
               packageForLinux: '$(System.ArtifactsDirectory)/drop/*'
