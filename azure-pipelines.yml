@@ -27,37 +27,14 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-          - task: CopyFiles@2
+          - task: jib@2
             inputs:
-              SourceFolder: '/home/vsts/work/1/s/build/libs/'
-              Contents: '*'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
-  - stage: Deploy
-    jobs:
-      - job: Deploy
-        pool:
-          vmImage: 'vs2017-win2016'
-
-        steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'
-              downloadPath: '$(System.ArtifactsDirectory)'
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'datacalog-serviceconnnection'
-              appType: 'webAppContainer'
-              WebAppName: 'datacatalog-userhandlingservice'
-              DockerNamespace: 'samples'
-              DockerRepository: 'userhandler'
-              DockerImageTag: 'latest'
-              StartupCommand: 'catalina run'
-              packageForLinux: '$(System.ArtifactsDirectory)/drop/*'
+              workingDirectory: ''
+                gradleWrapperFile: 'gradlew'
+                gradleOptions: '-Xmx3072m'
+                javaHomeOption: 'JDKVersion'
+                jdkVersionOption: '1.11'
+                jdkArchitectureOption: 'x64'
+                publishJUnitResults: true
+                testResultsFiles: '**/TEST-*.xml'
+                tasks: 'jib'

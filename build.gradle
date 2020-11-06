@@ -5,6 +5,7 @@ plugins {
 	id 'java'
 	id 'application'
 	id 'maven'
+	id 'com.google.cloud.tools.jib' version '2.6.0'
 }
 
 group = 'edu.bbte.projectblueblook'
@@ -51,5 +52,7 @@ openApiGenerate {
 	generatorName = "spring"
 	validateSpec = false
 }
+
+jib.to.image = 'datacatalogregistry.azurecr.io/testimg'
 
 
