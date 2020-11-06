@@ -41,13 +41,18 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-          - task: Docker@2
-              displayName: Build and push an image to container registry
-              inputs:
-                command: buildAndPush
-                repository: $(imageRepository)
-                dockerfile: $(dockerfile)
-                containerRegistry: $(dockerRegistryServiceConnection)
-                tags: |
-                  $(tag)
+      -job: Deploy
+       pool:
+         vmImage: 'ubuntu-latest'
+
+       steps:
+         - task: Docker@2
+             displayName: Build and push an image to container registry
+             inputs:
+               command: buildAndPush
+               repository: $(imageRepository)
+               dockerfile: $(dockerfile)
+               containerRegistry: $(dockerRegistryServiceConnection)
+               tags: |
+                 $(tag)
 
