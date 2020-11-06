@@ -53,8 +53,8 @@ stages:
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
-             # azureSubscription: $(azureSubscription)
-           #   azureSubscription: 'Azure for Students(1c8fc954-ebe4-4148-836e-b4dfa8515377)'
+              ConnectedServiceName: 'datacalog-serviceconnection'
+              azureSubscription: 'datacalog-serviceconnnection'
               appType: 'apiApp'
               WebAppName: 'datacatalog-userhandlingservice'
               packageForLinux: '$(System.ArtifactsDirectory)/drop/*'
