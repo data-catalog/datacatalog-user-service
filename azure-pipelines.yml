@@ -50,4 +50,4 @@ stages:
               ConnectionType: 'AzureRM'
               appType: 'apiApp'
               WebAppName: 'datacatalog-userhandlingservice'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              packageForLinux: '$(System.ArtifactsDirectory)/drop/*.war'
