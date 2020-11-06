@@ -41,11 +41,7 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-      - job: Deploy
-        pool:
-         vmImage: 'ubuntu-latest'
-
-        steps:
+              
           - task: Docker@2
             inputs:
               command: buildAndPush
