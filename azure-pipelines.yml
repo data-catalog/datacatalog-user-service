@@ -27,14 +27,31 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-          - task: jib@2
+          - task: CopyFiles@2
             inputs:
-              workingDirectory: ''
-                gradleWrapperFile: 'gradlew'
-                gradleOptions: '-Xmx3072m'
-                javaHomeOption: 'JDKVersion'
-                jdkVersionOption: '1.11'
-                jdkArchitectureOption: 'x64'
-                publishJUnitResults: true
-                testResultsFiles: '**/TEST-*.xml'
-                tasks: 'jib'
+              SourceFolder: '/home/vsts/work/1/s/build/libs/'
+              Contents: '*'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+  - stage: Deploy
+    jobs:
+      - job: Deploy
+        pool:
+          vmImage: 'ubuntu-latest'
+
+          steps:
+            - task: Gradle@2
+                inputs:
+                  workingDirectory: ''
+                  gradleWrapperFile: 'gradlew'
+                  gradleOptions: '-Xmx3072m'
+                  javaHomeOption: 'JDKVersion'
+                  jdkVersionOption: '1.11'
+                  jdkArchitectureOption: 'x64'
+                  publishJUnitResults: true
+                  testResultsFiles: '**/TEST-*.xml'
+                  tasks: 'jib'
