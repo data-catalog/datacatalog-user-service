@@ -41,8 +41,13 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               tasks: 'assemble'
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: '/home/vsts/work/1/s/build/libs/'
-              Contents: '*'
-              TargetFolder: '/home/vsts/work/1/s/target/'
+          - task: Docker@2
+              displayName: Build and push an image to container registry
+              inputs:
+                command: buildAndPush
+                repository: $(imageRepository)
+                dockerfile: $(dockerfile)
+                containerRegistry: $(dockerRegistryServiceConnection)
+                tags: |
+                  $(tag)
+
