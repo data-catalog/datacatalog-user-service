@@ -39,12 +39,12 @@ stages:
             tasks: "assemble war"
         - task: Docker@1
           displayName: 'Build Container Image'
-            inputs:
-            azureSubscriptionEndpoint: 'AzureSC'
-            azureContainerRegistry: '$(acrHostName)'
-            imageName: '$(imageName):$(Build.BuildId)'
-            useDefaultContext: false
-            buildContext: '$(System.DefaultWorkingDirectory)/PublishedWebApp'
+          inputs:
+              azureSubscriptionEndpoint: 'AzureSC'
+              azureContainerRegistry: '$(acrHostName)'
+              imageName: '$(imageName):$(Build.BuildId)'
+              useDefaultContext: false
+              buildContext: '$(System.DefaultWorkingDirectory)/PublishedWebApp'
         - task: Docker@1
           displayName: 'Push container image'
           inputs:
