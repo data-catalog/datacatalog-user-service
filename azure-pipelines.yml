@@ -34,7 +34,6 @@ stages:
             inputs:
               command: buildAndPush
               repository: $(imageRepository)
-              dockerfile:  '/home/vsts/work/1/s/Dockerfile'
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
