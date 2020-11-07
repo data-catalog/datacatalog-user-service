@@ -61,7 +61,7 @@ stages:
               TargetFolder: "$(build.artifactstagingdirectory)"
 
           # Publish the app as an artifact
-          - publish: $(Build.StaginDirectory)
+          - publish: $(Build.StagingDirectory)
             artifact: app
   - stage: Staging
     jobs:
