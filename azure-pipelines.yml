@@ -44,7 +44,7 @@ stages:
               azureContainerRegistry: "$(acrHostName)"
               imageName: "$(imageName):$(Build.BuildId)"
               useDefaultContext: false
-              buildContext: "$(System.DefaultWorkingDirectory)/PublishedWebApp"
+              buildContext: "$(System.DefaultWorkingDirectory)/build/libs"
           - task: Docker@1
             displayName: "Push container image"
             inputs:
