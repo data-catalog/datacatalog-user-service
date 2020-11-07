@@ -5,7 +5,7 @@ variables:
   location: "North Europe"
   acrHostName: "datacatalogregistry.azurecr.io"
   acrName: "datacatalogregistry"
-  rgName: "datacalog"
+  rgName: "datacatalog"
   imageName: "usertest"
   webAppName: "apptest"
 
