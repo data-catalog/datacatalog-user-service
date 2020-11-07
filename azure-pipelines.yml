@@ -7,7 +7,7 @@ variables:
   acrName: "datacatalogregistry"
   rgName: "datacatalog"
   imageName: "usertest"
-  webAppName: "apptest"
+  webAppName: "datacatalogregistryuserhandletest"
 
 stages:
   #Build stage
