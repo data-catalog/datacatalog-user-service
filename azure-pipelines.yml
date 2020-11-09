@@ -91,7 +91,7 @@ stages:
               appType: applinux
               WebAppName: $(webAppName)
               DockerNamespace: $(acrHostName)
-              DockerRepository: $(acrName)
+              DockerRepository: $(imageName)
               DockerImageTag: "$(Build.BuildId)"
               WebAppUri: webAppUrl
               TakeAppOfflineFlag: true
