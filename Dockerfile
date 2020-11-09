@@ -3,6 +3,8 @@ COPY --chown=gradle:gradle . /usr/datacatalog
 WORKDIR /usr/datacatalog
 RUN gradle bootJar
 
+EXPOSE 3000
+
 FROM openjdk:11-slim
 COPY --from=stage1 /usr/datacatalog /usr/datacatalog
 CMD java -jar /usr/datacatalog/build/libs/datacatalog-1.0.0-SNAPSHOT.jar
