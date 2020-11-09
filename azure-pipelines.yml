@@ -92,7 +92,7 @@ stages:
               WebAppName: $(webAppName)
               DockerNamespace: $(acrHostName)
               DockerRepository: $(webAppName)
-              DockerImageTag: "$(Build.BuildId)"
+              DockerImageTag: "latest"
               WebAppUri: webAppUrl
               TakeAppOfflineFlag: true
               UseWebDeploy: true
