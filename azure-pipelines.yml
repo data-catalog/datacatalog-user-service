@@ -51,7 +51,7 @@ stages:
               azureSubscriptionEndpoint: "AzureSC"
               azureContainerRegistry: "$(acrHostName)"
               command: "Push an image"
-              imageName: "$(imageName):latest"
+              imageName: "$(imageName):$(Build.BuildId)"
 
           #Copy ARM templates
           - task: CopyFiles@2
@@ -92,7 +92,7 @@ stages:
               WebAppName: $(webAppName)
               DockerNamespace: $(acrHostName)
               DockerRepository: $(webAppName)
-              DockerImageTag: "latest"
+              DockerImageTag: "$(Build.BuildId)"
               WebAppUri: webAppUrl
               TakeAppOfflineFlag: true
               UseWebDeploy: true
