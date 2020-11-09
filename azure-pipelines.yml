@@ -42,7 +42,7 @@ stages:
             inputs:
               azureSubscriptionEndpoint: "AzureSC"
               azureContainerRegistry: "$(acrHostName)"
-              imageName: "$(imageName):$(Build.BuildId)"
+              imageName: "$(imageName):latest"
               useDefaultContext: false
               buildContext: "$(System.DefaultWorkingDirectory)/build/libs"
           - task: Docker@1
@@ -51,7 +51,7 @@ stages:
               azureSubscriptionEndpoint: "AzureSC"
               azureContainerRegistry: "$(acrHostName)"
               command: "Push an image"
-              imageName: "$(imageName):$(Build.BuildId)"
+              imageName: "$(imageName):latest"
 
           #Copy ARM templates
           - task: CopyFiles@2
