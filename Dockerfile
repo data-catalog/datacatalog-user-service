@@ -1,8 +1,8 @@
 FROM gradle:6.6.1-jdk11-hotspot AS stage1
 COPY . /usr/datacatalog
 WORKDIR /usr/datacatalog
-RUN gradle assemble
+RUN gradle bootJar --no-daemon
 
-FROM tomcat:jre11-slim
-RUN rm -rf webapps/ROOT
-COPY --from=stage1 /usr/datacatalog/build/libs/datacatalog-1.0.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+FROM openjdk:11-slim
+COPY --from=stage1 /usr/datacatalog /usr/datacatalog
+CMD java -jar /usr/datacatalog/build/libs/datacatalog-1.0.0-SNAPSHOT.jar
