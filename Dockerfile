@@ -1,6 +1,6 @@
 FROM openjdk:11-jdk-slim AS stage1
 COPY . ./app
-EXPOSE 3000
+EXPOSE 8080
 
 FROM tomcat:jre11-slim
 RUN rm -rf webapps/ROOT
