@@ -97,6 +97,7 @@ public class UserMongoController implements UserApi {
                 userResponse.setUsername(username);
                 userResponse.setFirstName("Johnny");
                 userResponse.setLastName("Sins");
+                userResponse.setId("ID");
                 response.setUser(userResponse);
 
 
