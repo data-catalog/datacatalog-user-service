@@ -118,4 +118,5 @@ hs_err_pid*
 
 
 !/gradle/wrapper/gradle-wrapper.jar
-!/build/libs/*.jar
+
+!datacatalog-1.0.0-SNAPSHOT.jar
