@@ -45,7 +45,6 @@ public class UserMongoController implements UserApi {
         FindIterable<Document> docs = users.find(new Document("email", email)).limit(1);
         for (Document doc : docs) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-            //return "User with email " + email + " already exists.";
         }
 
         // Checking if username is unique
@@ -64,9 +63,8 @@ public class UserMongoController implements UserApi {
         user.append("username", username);
         user.append("first_name", userRequest.getFirstName());
         user.append("last_name", userRequest.getLastName());
-        user.append("rank", userRequest.getRole().toString());
+        user.append("role", userRequest.getRole().toString());
         user.append("password", hashAndSalt);
-        //System.out.println(email + " " + username + " " + userRequest.getFirstName() + " " + userRequest.getLastName() + " " + userRequest.getRole() + " " + hashAndSalt);
         try {
             users.insertOne(user);
         } catch(Exception e) {
@@ -75,8 +73,6 @@ public class UserMongoController implements UserApi {
             System.out.println(e.getMessage());
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        //return "User registered successfully";
-        //return null;
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
@@ -95,9 +91,14 @@ public class UserMongoController implements UserApi {
                 // ADD USER TO RESPONSE
                 UserResponse userResponse = new UserResponse();
                 userResponse.setUsername(username);
-                userResponse.setFirstName("Johnny");
-                userResponse.setLastName("Sins");
-                userResponse.setId("ID");
+                userResponse.setId(doc.getObjectId("_id").toString());
+                userResponse.setEmail(doc.getString("email"));
+                userResponse.setLastName(doc.getString("last_name"));
+                userResponse.setFirstName(doc.getString("first_name"));
+                userResponse.setRole(doc.getString("role").equals("admin")
+                        ? UserResponse.RoleEnum.ADMIN
+                        : UserResponse.RoleEnum.USER
+                );
                 response.setUser(userResponse);
 
 
@@ -132,7 +133,7 @@ public class UserMongoController implements UserApi {
             result.setFirstName(doc.get("first_name").toString());
             result.setLastName(doc.get("last_name").toString());
             result.setUsername(doc.get("username").toString());
-            result.setRole(doc.get("rank").toString().equals("admin")
+            result.setRole(doc.get("role").toString().equals("admin")
                     ? UserResponse.RoleEnum.ADMIN
                     : UserResponse.RoleEnum.USER);
             return new ResponseEntity<UserResponse>(result, HttpStatus.OK);
@@ -151,7 +152,7 @@ public class UserMongoController implements UserApi {
             result.setFirstName(doc.get("first_name").toString());
             result.setLastName(doc.get("last_name").toString());
             result.setUsername(doc.get("username").toString());
-            result.setRole(doc.get("rank").toString().equals("admin")
+            result.setRole(doc.get("role").toString().equals("admin")
                     ? UserResponse.RoleEnum.ADMIN
                     : UserResponse.RoleEnum.USER);
             results.add(result);
