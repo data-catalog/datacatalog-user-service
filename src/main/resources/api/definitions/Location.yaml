@@ -1,0 +1,15 @@
+title: Location
+type: object
+description: The base asbstract model of locations. Every specific location (ex. UrlLocation) extends this model.
+properties:
+  type:
+    type: string
+    description: |
+      The type of the location.
+    example: url
+discriminator: 
+  propertyName: type
+  mapping:
+    url: ./UrlLocation.yaml
+required:
+  - type
