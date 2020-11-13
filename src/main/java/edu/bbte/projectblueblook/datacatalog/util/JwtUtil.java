@@ -28,6 +28,10 @@ public class JwtUtil {
         return claims.get("role").toString();
     }
 
+    public String extractUserId(Claims claims) {
+        return claims.get("userId").toString();
+    }
+
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
             .setSigningKey(SECRET)
@@ -43,6 +47,7 @@ public class JwtUtil {
         Map<String, Object> claims = new ConcurrentHashMap<>();
         claims.put("role", userResponse.getRole());
         claims.put("username", userResponse.getUsername());
+        claims.put("userId", userResponse.getId());
         return createToken(claims, userResponse);
     }
 
@@ -56,14 +61,16 @@ public class JwtUtil {
     }
 
 
-    public Boolean validateToken(String token, UserBase userBase) {
+    public Boolean validateToken(String token, UserResponse userResponse) {
         final Claims claims = extractAllClaims(token);
         String username = extractUsername(claims);
+        String userId = extractUserId(claims);
         String role = extractRole(claims);
         Date expirationDate = extractExpiration(claims);
 
-        return username.equals(userBase.getUsername())
-            && role.equals(userBase.getRole().toString())
+        return username.equals(userResponse.getUsername())
+            && role.equals(userResponse.getRole().toString())
+            && userId.equals(userResponse.getId())
             && !isTokenExpired(expirationDate);
     }
 
