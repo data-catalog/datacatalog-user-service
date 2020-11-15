@@ -125,9 +125,14 @@ public class UserMongoController implements UserApi {
 
     @Override
     public ResponseEntity<UserResponse> getUser(String userId) {
-        Document user = users
-                .find(new Document("_id", new ObjectId(userId)))
-                .first();
+        Document user;
+        try {
+            user = users
+                    .find(new Document("_id", new ObjectId(userId)))
+                    .first();
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<UserResponse>(HttpStatus.NOT_FOUND);
+        }
         if (user == null) {
             return new ResponseEntity<UserResponse>(HttpStatus.NOT_FOUND);
         }
