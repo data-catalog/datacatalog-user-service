@@ -1,11 +1,11 @@
-package edu.bbte.projectblueblook.datacatalog.model;
+package edu.bbte.projectbluebook.datacatalog.users.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import edu.bbte.projectblueblook.datacatalog.model.UserBase;
-import edu.bbte.projectblueblook.datacatalog.model.UserResponseAllOf;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserBase;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserRequestAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -14,16 +14,12 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Model sent by the server to the client
+ * The user model sent by the client to the server.
  */
-@ApiModel(description = "Model sent by the server to the client")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-10-29T12:17:48.213780400+02:00[Europe/Bucharest]")
+@ApiModel(description = "The user model sent by the client to the server.")
 
-public class UserResponse  implements Serializable {
+public class UserRequest  implements Serializable {
   private static final long serialVersionUID = 1L;
-
-  @JsonProperty("id")
-  private String id;
 
   @JsonProperty("email")
   private String email;
@@ -75,28 +71,10 @@ public class UserResponse  implements Serializable {
   @JsonProperty("role")
   private RoleEnum role = RoleEnum.USER;
 
-  public UserResponse id(String id) {
-    this.id = id;
-    return this;
-  }
+  @JsonProperty("password")
+  private String password;
 
-  /**
-   * Get id
-   * @return id
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public UserResponse email(String email) {
+  public UserRequest email(String email) {
     this.email = email;
     return this;
   }
@@ -108,7 +86,7 @@ public class UserResponse  implements Serializable {
   @ApiModelProperty(example = "example@mail.com", required = true, value = "")
   @NotNull
 
-@Email
+@javax.validation.constraints.Email
   public String getEmail() {
     return email;
   }
@@ -117,7 +95,7 @@ public class UserResponse  implements Serializable {
     this.email = email;
   }
 
-  public UserResponse firstName(String firstName) {
+  public UserRequest firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -138,7 +116,7 @@ public class UserResponse  implements Serializable {
     this.firstName = firstName;
   }
 
-  public UserResponse lastName(String lastName) {
+  public UserRequest lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -159,7 +137,7 @@ public class UserResponse  implements Serializable {
     this.lastName = lastName;
   }
 
-  public UserResponse username(String username) {
+  public UserRequest username(String username) {
     this.username = username;
     return this;
   }
@@ -180,7 +158,7 @@ public class UserResponse  implements Serializable {
     this.username = username;
   }
 
-  public UserResponse role(RoleEnum role) {
+  public UserRequest role(RoleEnum role) {
     this.role = role;
     return this;
   }
@@ -200,40 +178,60 @@ public class UserResponse  implements Serializable {
     this.role = role;
   }
 
+  public UserRequest password(String password) {
+    this.password = password;
+    return this;
+  }
+
+  /**
+   * Password of minimum 6 characters, which contains at least a number and a letter
+   * @return password
+  */
+  @ApiModelProperty(example = "password1234", value = "Password of minimum 6 characters, which contains at least a number and a letter")
+
+@Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$") @Size(min=6) 
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserResponse userResponse = (UserResponse) o;
-    return Objects.equals(this.id, userResponse.id) &&
-        Objects.equals(this.email, userResponse.email) &&
-        Objects.equals(this.firstName, userResponse.firstName) &&
-        Objects.equals(this.lastName, userResponse.lastName) &&
-        Objects.equals(this.username, userResponse.username) &&
-        Objects.equals(this.role, userResponse.role);
+    UserRequest userRequest = (UserRequest) o;
+    return Objects.equals(this.email, userRequest.email) &&
+        Objects.equals(this.firstName, userRequest.firstName) &&
+        Objects.equals(this.lastName, userRequest.lastName) &&
+        Objects.equals(this.username, userRequest.username) &&
+        Objects.equals(this.role, userRequest.role) &&
+        Objects.equals(this.password, userRequest.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, firstName, lastName, username, role);
+    return Objects.hash(email, firstName, lastName, username, role, password);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserResponse {\n");
+    sb.append("class UserRequest {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
+    sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -242,7 +240,7 @@ public class UserResponse  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog.model;
+package edu.bbte.projectbluebook.datacatalog.users.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,26 +11,48 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * UserRequestAllOf
+ * UserLoginRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-10-29T12:17:48.213780400+02:00[Europe/Bucharest]")
 
-public class UserRequestAllOf  implements Serializable {
+public class UserLoginRequest  implements Serializable {
   private static final long serialVersionUID = 1L;
+
+  @JsonProperty("username")
+  private String username;
 
   @JsonProperty("password")
   private String password;
 
-  public UserRequestAllOf password(String password) {
+  public UserLoginRequest username(String username) {
+    this.username = username;
+    return this;
+  }
+
+  /**
+   * Get username
+   * @return username
+  */
+  @ApiModelProperty(example = "username1", value = "")
+
+@Size(min=3) 
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public UserLoginRequest password(String password) {
     this.password = password;
     return this;
   }
 
   /**
-   * Password of minimum 6 characters, which contains at least a number and a letter
+   * Get password
    * @return password
   */
-  @ApiModelProperty(example = "password1234", value = "Password of minimum 6 characters, which contains at least a number and a letter")
+  @ApiModelProperty(example = "password123", value = "")
 
 @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$") @Size(min=6) 
   public String getPassword() {
@@ -43,27 +65,29 @@ public class UserRequestAllOf  implements Serializable {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserRequestAllOf userRequestAllOf = (UserRequestAllOf) o;
-    return Objects.equals(this.password, userRequestAllOf.password);
+    UserLoginRequest userLoginRequest = (UserLoginRequest) o;
+    return Objects.equals(this.username, userLoginRequest.username) &&
+        Objects.equals(this.password, userLoginRequest.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(password);
+    return Objects.hash(username, password);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserRequestAllOf {\n");
+    sb.append("class UserLoginRequest {\n");
     
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -73,7 +97,7 @@ public class UserRequestAllOf  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

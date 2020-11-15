@@ -7,8 +7,8 @@
   "generateApiDocumentation": "false",
   "supportingFiles": "false",
   "serializableModel": "true",
-  "basePackage": "edu.bbte.projectblueblook.datacatalog",
-  "modelPackage": "edu.bbte.projectblueblook.datacatalog.model",
-  "apiPackage": "edu.bbte.projectblueblook.datacatalog.api",
-  "configPackage": "edu.bbte.projectblueblook.datacatalog.config"
+  "basePackage": "edu.bbte.projectbluebook.datacatalog.users",
+  "modelPackage": "edu.bbte.projectbluebook.datacatalog.users.model",
+  "apiPackage": "edu.bbte.projectbluebook.datacatalog.users.api",
+  "configPackage": "edu.bbte.projectbluebook.datacatalog.users.config"
 }

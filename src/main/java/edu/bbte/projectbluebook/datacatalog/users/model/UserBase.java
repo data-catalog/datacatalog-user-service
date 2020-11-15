@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog.model;
+package edu.bbte.projectbluebook.datacatalog.users.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,6 @@ import javax.validation.constraints.*;
 /**
  * UserBase
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-10-29T12:17:48.213780400+02:00[Europe/Bucharest]")
 
 public class UserBase  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -81,7 +80,7 @@ public class UserBase  implements Serializable {
   @ApiModelProperty(example = "example@mail.com", required = true, value = "")
   @NotNull
 
-@Email
+@javax.validation.constraints.Email
   public String getEmail() {
     return email;
   }
@@ -175,7 +174,7 @@ public class UserBase  implements Serializable {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -213,7 +212,7 @@ public class UserBase  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

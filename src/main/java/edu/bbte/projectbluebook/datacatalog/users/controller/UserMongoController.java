@@ -1,23 +1,22 @@
-package edu.bbte.projectblueblook.datacatalog.controller;
+package edu.bbte.projectbluebook.datacatalog.users.controller;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import edu.bbte.projectblueblook.datacatalog.api.UserApi;
-import edu.bbte.projectblueblook.datacatalog.model.UserLoginRequest;
-import edu.bbte.projectblueblook.datacatalog.model.UserLoginResponse;
-import edu.bbte.projectblueblook.datacatalog.model.UserRequest;
-import edu.bbte.projectblueblook.datacatalog.model.UserResponse;
-import edu.bbte.projectblueblook.datacatalog.util.JwtUtil;
+import edu.bbte.projectbluebook.datacatalog.users.api.UserApi;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.util.JwtUtil;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;

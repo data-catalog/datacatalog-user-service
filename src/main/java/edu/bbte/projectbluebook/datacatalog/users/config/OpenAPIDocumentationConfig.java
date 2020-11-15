@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog.config;
+package edu.bbte.projectbluebook.datacatalog.users.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.ServletContext;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-10-29T12:17:48.213780400+02:00[Europe/Bucharest]")
 
 @Configuration
 @EnableSwagger2
@@ -25,21 +24,21 @@ public class OpenAPIDocumentationConfig {
 
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Data Catalog")
-            .description("Data Catalog API.")
+            .title("User")
+            .description("Data Catalog User API.")
             .license("")
             .licenseUrl("http://unlicense.org")
             .termsOfServiceUrl("")
             .version("1.0")
-            .contact(new Contact("","", "szilard.tumo@stud.ubbcluj.ro"))
+            .contact(new Contact("","", "katacseke@gmail.com"))
             .build();
     }
 
     @Bean
-    public Docket customImplementation(ServletContext servletContext, @Value("${openapi.dataCatalog.base-path:}") String basePath) {
+    public Docket customImplementation(ServletContext servletContext, @Value("${openapi.user.base-path:}") String basePath) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                    .apis(RequestHandlerSelectors.basePackage("edu.bbte.projectblueblook.datacatalog.api"))
+                    .apis(RequestHandlerSelectors.basePackage("edu.bbte.projectbluebook.datacatalog.users.api"))
                     .build()
                 .pathProvider(new BasePathAwareRelativePathProvider(servletContext, basePath))
                 .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
