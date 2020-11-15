@@ -1,9 +1,9 @@
 <FindBugsFilter>
     <Match>
         <Or>
-            <Package name="~edu\.bbte\.projectbluebook\.datacatalog\.api"/>
-            <Package name="~edu\.bbte\.projectbluebook\.datacatalog\.config"/>
-            <Package name="~edu\.bbte\.projectbluebook\.datacatalog\.model"/>
+            <Package name="~edu\.bbte\.projectbluebook\.datacatalog\.users\.api"/>
+            <Package name="~edu\.bbte\.projectbluebook\.datacatalog\.users\.config"/>
+            <Package name="~edu\.bbte\.projectbluebook\.datacatalog\.users\.model"/>
         </Or>
     </Match>
     <Match>
