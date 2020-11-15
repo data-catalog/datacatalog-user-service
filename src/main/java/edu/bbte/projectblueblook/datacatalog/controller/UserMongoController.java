@@ -32,7 +32,6 @@ public class UserMongoController implements UserApi {
     private final MongoClient mongoClient = new MongoClient(uri);
     private final MongoDatabase database = mongoClient.getDatabase("DataCatalog");
     private final MongoCollection<Document> users = database.getCollection("Users");
-    private final MongoCollection<Document> assets = database.getCollection("Assets");
     private final SecureRandom secureRandom = new SecureRandom();
     private final PasswordEncoder passwordencoder = new BCryptPasswordEncoder(10, secureRandom);
     private final JwtUtil jwtUtil = new JwtUtil();
@@ -42,17 +41,20 @@ public class UserMongoController implements UserApi {
 
         String email = userRequest.getEmail();
         // Checking if email is unique
-        FindIterable<Document> docs = users.find(new Document("email", email)).limit(1);
-        for (Document doc : docs) {
+        Document userEmail = users
+                .find(new Document("email", email))
+                .first();
+        if (userEmail != null) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         // Checking if username is unique
         String username = userRequest.getUsername();
-        docs = users.find(new Document("username", username)).limit(1);
-        for (Document doc : docs) {
+        Document userName = users
+                .find(new Document("username", username))
+                .first();
+        if (userName != null) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-            //return "Username " + username + " already exists.";
         }
 
         // If email and username are unique then register the new user
@@ -80,34 +82,32 @@ public class UserMongoController implements UserApi {
     public ResponseEntity<UserLoginResponse> login(@Valid UserLoginRequest userLoginRequest) {
         String username = userLoginRequest.getUsername();
         String password = userLoginRequest.getPassword();
-        FindIterable<Document> docs = users.find(new Document("username", username)).limit(1);
-        for (Document doc : docs) {
-            if (!doc.get("username").equals(username) || doc == null) {
-                return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
-            }
-            String hashed = doc.get("password").toString();
-            if (passwordencoder.matches(password, hashed)) {
-                UserLoginResponse response = new UserLoginResponse();
-                // ADD USER TO RESPONSE
-                UserResponse userResponse = new UserResponse();
-                userResponse.setUsername(username);
-                userResponse.setId(doc.getObjectId("_id").toString());
-                userResponse.setEmail(doc.getString("email"));
-                userResponse.setLastName(doc.getString("last_name"));
-                userResponse.setFirstName(doc.getString("first_name"));
-                userResponse.setRole(doc.getString("role").equals("admin")
-                        ? UserResponse.RoleEnum.ADMIN
-                        : UserResponse.RoleEnum.USER
-                );
-                response.setUser(userResponse);
-
-
-                // SET JWT TOKEN HERE
-                String token = jwtUtil.generateToken(userResponse);
-                response.setToken(token);
-                return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
-            }
+        Document user = users
+                .find(new Document("username", username))
+                .first();
+        if (user == null) {
             return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
+        }
+        String hashed = user.get("password").toString();
+        if (passwordencoder.matches(password, hashed)) {
+            UserLoginResponse response = new UserLoginResponse();
+            // ADD USER TO RESPONSE
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUsername(username);
+            userResponse.setId(user.getObjectId("_id").toString());
+            userResponse.setEmail(user.getString("email"));
+            userResponse.setLastName(user.getString("last_name"));
+            userResponse.setFirstName(user.getString("first_name"));
+            userResponse.setRole(user.getString("role").equals("admin")
+                    ? UserResponse.RoleEnum.ADMIN
+                    : UserResponse.RoleEnum.USER
+            );
+            response.setUser(userResponse);
+
+            // SET JWT TOKEN HERE
+            String token = jwtUtil.generateToken(userResponse);
+            response.setToken(token);
+            return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
         }
         return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
     }
@@ -125,20 +125,22 @@ public class UserMongoController implements UserApi {
 
     @Override
     public ResponseEntity<UserResponse> getUser(String userId) {
-        FindIterable<Document> docs = users.find(new Document("_id", new ObjectId(userId)));
-        for(Document doc : docs) {
-            UserResponse result = new UserResponse();
-            result.setId(userId);
-            result.setEmail(doc.get("email").toString());
-            result.setFirstName(doc.get("first_name").toString());
-            result.setLastName(doc.get("last_name").toString());
-            result.setUsername(doc.get("username").toString());
-            result.setRole(doc.get("role").toString().equals("admin")
-                    ? UserResponse.RoleEnum.ADMIN
-                    : UserResponse.RoleEnum.USER);
-            return new ResponseEntity<UserResponse>(result, HttpStatus.OK);
+        Document user = users
+                .find(new Document("_id", new ObjectId(userId)))
+                .first();
+        if (user == null) {
+            return new ResponseEntity<UserResponse>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<UserResponse>(HttpStatus.NOT_FOUND);
+        UserResponse result = new UserResponse();
+        result.setId(userId);
+        result.setEmail(user.get("email").toString());
+        result.setFirstName(user.get("first_name").toString());
+        result.setLastName(user.get("last_name").toString());
+        result.setUsername(user.get("username").toString());
+        result.setRole(user.get("role").toString().equals("admin")
+                ? UserResponse.RoleEnum.ADMIN
+                : UserResponse.RoleEnum.USER);
+        return new ResponseEntity<UserResponse>(result, HttpStatus.OK);
     }
 
     @Override
