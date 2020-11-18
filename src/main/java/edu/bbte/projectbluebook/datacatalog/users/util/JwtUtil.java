@@ -1,7 +1,6 @@
-package edu.bbte.projectblueblook.datacatalog.util;
+package edu.bbte.projectbluebook.datacatalog.users.util;
 
-import edu.bbte.projectblueblook.datacatalog.model.UserBase;
-import edu.bbte.projectblueblook.datacatalog.model.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

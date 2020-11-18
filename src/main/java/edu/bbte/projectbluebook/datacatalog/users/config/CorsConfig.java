@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog.config;
+package edu.bbte.projectbluebook.datacatalog.users.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

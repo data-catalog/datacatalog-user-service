@@ -3,12 +3,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package edu.bbte.projectblueblook.datacatalog.api;
+package edu.bbte.projectbluebook.datacatalog.users.api;
 
-import edu.bbte.projectblueblook.datacatalog.model.UserLoginRequest;
-import edu.bbte.projectblueblook.datacatalog.model.UserLoginResponse;
-import edu.bbte.projectblueblook.datacatalog.model.UserRequest;
-import edu.bbte.projectblueblook.datacatalog.model.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.InlineResponse200;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +31,6 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-10-29T12:17:48.213780400+02:00[Europe/Bucharest]")
 
 @Validated
 @Api(value = "User", description = "the User API")
@@ -157,6 +157,35 @@ public interface UserApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"token\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODUxNDA5ODQsImlhdCI6MTQ4NTEzNzM4NCwiaXNzIjoiYWNtZS5jb20iLCJzdWIiOiIyOWFjMGMxOC0wYjRhLTQyY2YtODJmYy0wM2Q1NzAzMThhMWQiLCJhcHBsaWNhdGlvbklkIjoiNzkxMDM3MzQtOTdhYi00ZDFhLWFmMzctZTAwNmQwNWQyOTUyIiwic\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * POST /token_info
+     * It provides information about the token.
+     *
+     * @param body Contains the token. (optional)
+     * @return OK (status code 200)
+     */
+    @ApiOperation(value = "", nickname = "tokenInfo", notes = "It provides information about the token.", response = InlineResponse200.class, tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "OK", response = InlineResponse200.class) })
+    @RequestMapping(value = "/token_info",
+        produces = { "application/json" }, 
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    default ResponseEntity<InlineResponse200> tokenInfo(@ApiParam(value = "Contains the token."  )  @Valid @RequestBody(required = false) String body) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"active\" : true, \"exp\" : 1437275311, \"iat\" : 1419350238, \"client_id\" : \"client_id\", \"username\" : \"user1\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

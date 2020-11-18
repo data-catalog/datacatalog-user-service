@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog;
+package edu.bbte.projectbluebook.datacatalog.users;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

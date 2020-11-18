@@ -48,10 +48,14 @@ test {
 }
 
 openApiGenerate {
-	inputSpec = "$rootDir/src/main/resources/api/DataCatalog.yaml".toString()
+	inputSpec = "$rootDir/src/main/resources/api/User.yaml".toString()
 	configFile = "$rootDir/openapi-generator-config.json".toString()
 	ignoreFileOverride = "$rootDir/.openapi-generator-ignore".toString()
+	outputDir = "$rootDir".toString()
 	generatorName = "spring"
 	validateSpec = false
+	configOptions = [
+			hideGenerationTimestamp: "true"
+	]
 }
 

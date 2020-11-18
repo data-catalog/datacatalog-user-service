@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog;
+package edu.bbte.projectbluebook.datacatalog.users;
 
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;

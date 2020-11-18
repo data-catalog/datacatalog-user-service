@@ -1,4 +1,4 @@
-package edu.bbte.projectblueblook.datacatalog.api;
+package edu.bbte.projectbluebook.datacatalog.users.api;
 
 import org.springframework.web.context.request.NativeWebRequest;
 
