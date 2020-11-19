@@ -2,6 +2,7 @@ package edu.bbte.projectbluebook.datacatalog.users.controller;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -27,7 +28,8 @@ import java.util.List;
 @RestController
 public class UserMongoController implements UserApi {
 
-    private final MongoClientURI uri = new MongoClientURI("mongodb+srv://m001-student:m001-mongodb-basics@cluster0.dlhll.mongodb.net/DataCatalog?retryWrites=true&w=majority");
+    private final MongoClientURI uri = new MongoClientURI("mongodb+srv:"
+            + "//m001-student:m001-mongodb-basics@cluster0.dlhll.mongodb.net/DataCatalog?retryWrites=true&w=majority");
     private final MongoClient mongoClient = new MongoClient(uri);
     private final MongoDatabase database = mongoClient.getDatabase("DataCatalog");
     private final MongoCollection<Document> users = database.getCollection("Users");
@@ -68,10 +70,11 @@ public class UserMongoController implements UserApi {
         user.append("password", hashAndSalt);
         try {
             users.insertOne(user);
-        } catch(Exception e) {
+        } catch (MongoException e) {
             // MongoDB specific error
             //return "Database problem, failed to register.";
-            System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
+            // TODO Implement Logger
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         return new ResponseEntity<Void>(HttpStatus.CREATED);
@@ -80,16 +83,15 @@ public class UserMongoController implements UserApi {
     @Override
     public ResponseEntity<UserLoginResponse> login(@Valid UserLoginRequest userLoginRequest) {
         String username = userLoginRequest.getUsername();
-        String password = userLoginRequest.getPassword();
         Document user = users
                 .find(new Document("username", username))
                 .first();
         if (user == null) {
             return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
         }
+        String password = userLoginRequest.getPassword();
         String hashed = user.get("password").toString();
         if (passwordencoder.matches(password, hashed)) {
-            UserLoginResponse response = new UserLoginResponse();
             // ADD USER TO RESPONSE
             UserResponse userResponse = new UserResponse();
             userResponse.setUsername(username);
@@ -101,6 +103,7 @@ public class UserMongoController implements UserApi {
                     ? UserResponse.RoleEnum.ADMIN
                     : UserResponse.RoleEnum.USER
             );
+            UserLoginResponse response = new UserLoginResponse();
             response.setUser(userResponse);
 
             // SET JWT TOKEN HERE
@@ -115,8 +118,9 @@ public class UserMongoController implements UserApi {
     public ResponseEntity<Void> deleteUser(String userId) {
         try {
             users.findOneAndDelete(new Document("_id", new ObjectId(userId)));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (MongoException e) {
+            // System.out.println(e.getMessage());
+            // TODO: Implement logging
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -151,7 +155,7 @@ public class UserMongoController implements UserApi {
     public ResponseEntity<List<UserResponse>> getUsers() {
         FindIterable<Document> docs = users.find();
         List<UserResponse> results = new ArrayList<>();
-        for(Document doc : docs) {
+        for (Document doc : docs) {
             UserResponse result = new UserResponse();
             result.setId(doc.get("_id").toString());
             result.setEmail(doc.get("email").toString());
