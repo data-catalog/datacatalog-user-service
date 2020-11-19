@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class JwtUtil {
 
-
     private static final String SECRET = "e87ad8981f954e17a622b8663db8520c";
 
     public String extractUsername(Claims claims) {
@@ -47,10 +46,10 @@ public class JwtUtil {
         claims.put("role", userResponse.getRole());
         claims.put("username", userResponse.getUsername());
         claims.put("userId", userResponse.getId());
-        return createToken(claims, userResponse);
+        return createToken(claims);
     }
 
-    private String createToken(Map<String,Object> claims, UserResponse userResponse) {
+    private String createToken(Map<String,Object> claims) {
         return Jwts.builder()
             .setClaims(claims)
             .setHeaderParam("typ", "JWT")
@@ -58,7 +57,6 @@ public class JwtUtil {
             .setExpiration(new Date(System.currentTimeMillis() + 172800000))
             .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
-
 
     public Boolean validateToken(String token, UserResponse userResponse) {
         final Claims claims = extractAllClaims(token);
