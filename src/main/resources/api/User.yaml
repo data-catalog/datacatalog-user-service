@@ -147,42 +147,8 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  active:
-                    type: boolean
-                    description: This is a boolean value of whether or not the presented token is currently active.
-                  client_id:
-                    type: string
-                    minLength: 1
-                    description: The unique identifier for the user that the token was issued to.
-                  username:
-                    type: string
-                    minLength: 1
-                    description: The username of the user that the token was issued to.
-                    example: user1
-                  exp:
-                    type: integer
-                    description: The unix timestamp indicating when this token will expire.
-                    example: 1437275311
-                  iat:
-                    type: integer
-                    description: Unix timestamp indicating when this token was originally issued.
-                    example: 1419350238
-                required:
-                  - active
-              examples:
-                Active response:
-                  value:
-                    active: true
-                    client_id: 231asdkj3249dkd
-                    username: janedoe
-                    exp: 1437275311
-                    iat: 1419350238
-                Inactive response:
-                  value:
-                    active: false
+                $ref: ./definitions/TokenInfoResponse.yaml
+              examples: {}
       description: It provides information about the token.
       requestBody:
         content:
