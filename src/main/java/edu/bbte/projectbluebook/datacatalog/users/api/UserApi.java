@@ -5,7 +5,7 @@
  */
 package edu.bbte.projectbluebook.datacatalog.users.api;
 
-import edu.bbte.projectbluebook.datacatalog.users.model.InlineResponse200;
+import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
@@ -174,18 +174,18 @@ public interface UserApi {
      * @param body Contains the token. (optional)
      * @return OK (status code 200)
      */
-    @ApiOperation(value = "", nickname = "tokenInfo", notes = "It provides information about the token.", response = InlineResponse200.class, tags={ "User", })
+    @ApiOperation(value = "", nickname = "tokenInfo", notes = "It provides information about the token.", response = TokenInfoResponse.class, tags={ "User", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = InlineResponse200.class) })
+        @ApiResponse(code = 200, message = "OK", response = TokenInfoResponse.class) })
     @RequestMapping(value = "/token_info",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<InlineResponse200> tokenInfo(@ApiParam(value = "Contains the token."  )  @Valid @RequestBody(required = false) String body) {
+    default ResponseEntity<TokenInfoResponse> tokenInfo(@ApiParam(value = "Contains the token."  )  @Valid @RequestBody(required = false) String body) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"active\" : true, \"exp\" : 1437275311, \"iat\" : 1419350238, \"client_id\" : \"client_id\", \"username\" : \"user1\" }";
+                    String exampleString = "{ \"role\" : \"user\", \"active\" : true, \"exp\" : 1437275311, \"userId\" : \"userId\", \"iat\" : 1419350238, \"username\" : \"user1\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
