@@ -1,12 +1,10 @@
 package edu.bbte.projectbluebook.datacatalog.users.util;
 
-import edu.bbte.projectbluebook.datacatalog.users.model.TokenValidation;
+import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,18 +58,29 @@ public class JwtUtil {
             .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 
-    public TokenValidation validateToken(String token) {
+    public TokenInfoResponse validateToken(String token) {
+        TokenInfoResponse response = new TokenInfoResponse();
         try {
             final Claims claims = extractAllClaims(token);
             Date expirationDate = extractExpiration(claims);
-            if (isTokenExpired(expirationDate)) {
-                return null;
-            } else {
-                return new TokenValidation(extractUsername(claims), extractRole(claims));
-            }
+            String role = extractRole(claims);
+            response.setExp((int) expirationDate.getTime());
+            response.setIat((int)claims.getIssuedAt().getTime());
 
-        } catch (SignatureException e) {
-            return null;
+            if ("user".equals(role)) {
+                response.setRole(TokenInfoResponse.RoleEnum.USER);
+            } else if ("admin".equals(role)) {
+                response.setRole(TokenInfoResponse.RoleEnum.ADMIN);
+            } else {
+                throw new JwtException("Unkown role");
+            }
+            response.setActive(!isTokenExpired(expirationDate));
+            response.setUserId(extractUserId(claims));
+            response.setUsername(extractUsername(claims));
+            return response;
+        } catch (JwtException ex) {
+            response.setActive(false);
+            return response;
         }
     }
 
