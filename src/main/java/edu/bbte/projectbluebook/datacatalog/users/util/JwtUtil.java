@@ -1,6 +1,8 @@
 package edu.bbte.projectbluebook.datacatalog.users.util;
 
+import edu.bbte.projectbluebook.datacatalog.users.model.TokenValidation;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -58,17 +60,19 @@ public class JwtUtil {
             .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 
-    public Boolean validateToken(String token, UserResponse userResponse) {
-        final Claims claims = extractAllClaims(token);
-        String username = extractUsername(claims);
-        String userId = extractUserId(claims);
-        String role = extractRole(claims);
-        Date expirationDate = extractExpiration(claims);
+    public TokenValidation validateToken(String token) {
+        try {
+            final Claims claims = extractAllClaims(token);
+            Date expirationDate = extractExpiration(claims);
+            if (isTokenExpired(expirationDate)) {
+                return null;
+            } else {
+                return new TokenValidation(extractUsername(claims), extractRole(claims));
+            }
 
-        return username.equals(userResponse.getUsername())
-            && role.equals(userResponse.getRole().toString())
-            && userId.equals(userResponse.getId())
-            && !isTokenExpired(expirationDate);
+        } catch (SignatureException e) {
+            return null;
+        }
     }
 
 }

@@ -116,6 +116,7 @@ public class UserMongoController implements UserApi {
 
     @Override
     public ResponseEntity<Void> deleteUser(String userId) {
+        System.out.println("DELETE CALLED");
         try {
             users.findOneAndDelete(new Document("_id", new ObjectId(userId)));
         } catch (MongoException e) {
