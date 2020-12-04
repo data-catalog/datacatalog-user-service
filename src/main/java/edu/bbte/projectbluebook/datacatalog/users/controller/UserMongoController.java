@@ -7,10 +7,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import edu.bbte.projectbluebook.datacatalog.users.api.UserApi;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginRequest;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginResponse;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.*;
 import edu.bbte.projectbluebook.datacatalog.users.util.JwtUtil;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -19,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -169,5 +165,15 @@ public class UserMongoController implements UserApi {
             results.add(result);
         }
         return new ResponseEntity<List<UserResponse>>(results, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<TokenInfoResponse> tokenInfo(@Valid String body) {
+        JwtUtil jwtUtil = new JwtUtil();
+        TokenInfoResponse response = jwtUtil.validateToken(body);
+        if (response == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<TokenInfoResponse>(response, HttpStatus.OK);
     }
 }

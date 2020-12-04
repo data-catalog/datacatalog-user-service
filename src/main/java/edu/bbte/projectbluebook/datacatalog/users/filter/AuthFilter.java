@@ -18,10 +18,12 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String uri = httpRequest.getRequestURI();
         String method = httpRequest.getMethod();
+        
 
         // Check for login / register endpoints
         if (isRegisterOrLogin(method, uri)) {
