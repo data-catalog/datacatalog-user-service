@@ -1,24 +1,16 @@
 package edu.bbte.projectbluebook.datacatalog.users.controller;
 
-import com.mongodb.MongoException;
-import com.mongodb.client.FindIterable;
 import edu.bbte.projectbluebook.datacatalog.users.api.UserApi;
 import edu.bbte.projectbluebook.datacatalog.users.model.*;
 import edu.bbte.projectbluebook.datacatalog.users.service.UserMongoService;
-import edu.bbte.projectbluebook.datacatalog.users.util.JwtUtil;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class UserMongoController implements UserApi {
-
 
     @Autowired
     private UserMongoService service;
@@ -45,11 +37,11 @@ public class UserMongoController implements UserApi {
 
     @Override
     public ResponseEntity<List<UserResponse>> getUsers() {
-       return service.getUsers();
+        return service.getUsers();
     }
 
     @Override
     public ResponseEntity<TokenInfoResponse> tokenInfo(@Valid String body) {
-       return service.tokenInfo(body);
+        return service.tokenInfo(body);
     }
 }

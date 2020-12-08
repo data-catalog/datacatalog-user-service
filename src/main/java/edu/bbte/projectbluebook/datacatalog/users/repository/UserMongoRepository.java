@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public class UserMongoRepository {
 
     private final MongoClientURI uri = new MongoClientURI("mongodb+srv:"
-        + "//m001-student:m001-mongodb-basics@cluster0.dlhll.mongodb.net/DataCatalog?retryWrites=true&w=majority");
+            + "//m001-student:m001-mongodb-basics@cluster0.dlhll.mongodb.net/DataCatalog?retryWrites=true&w=majority");
     private final MongoClient mongoClient = new MongoClient(uri);
     private final MongoDatabase database = mongoClient.getDatabase("DataCatalog");
     private final MongoCollection<Document> users = database.getCollection("Users");
@@ -35,7 +35,7 @@ public class UserMongoRepository {
         return true;
     }
 
-    public Document delete(Document id){
+    public Document delete(Document id) {
         return users.findOneAndDelete(id);
     }
 }

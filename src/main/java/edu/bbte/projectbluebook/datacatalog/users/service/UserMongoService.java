@@ -34,7 +34,7 @@ public class UserMongoService {
         // Checking if email is unique
         Document emailDocument = new Document("email", email);
         Document userEmail = repository.findByFilter(emailDocument)
-            .first();
+                .first();
         if (userEmail != null) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -43,7 +43,7 @@ public class UserMongoService {
         String username = userRequest.getUsername();
         Document usernameDocument = new Document("username", username);
         Document userName = repository.findByFilter(usernameDocument)
-            .first();
+                .first();
         if (userName != null) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -68,7 +68,7 @@ public class UserMongoService {
         String username = userLoginRequest.getUsername();
 
         Document user = repository.findByFilter(new Document("username", username))
-            .first();
+                .first();
         if (user == null) {
             return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
         }
@@ -83,8 +83,8 @@ public class UserMongoService {
             userResponse.setLastName(user.getString("last_name"));
             userResponse.setFirstName(user.getString("first_name"));
             userResponse.setRole(user.getString("role").equals("admin")
-                ? UserResponse.RoleEnum.ADMIN
-                : UserResponse.RoleEnum.USER
+                    ? UserResponse.RoleEnum.ADMIN
+                    : UserResponse.RoleEnum.USER
             );
             UserLoginResponse response = new UserLoginResponse();
             response.setUser(userResponse);
@@ -100,7 +100,7 @@ public class UserMongoService {
     public ResponseEntity<Void> deleteUser(String userId) {
         Document deleted;
         try {
-             deleted = repository.delete(new Document("_id", userId));
+            deleted = repository.delete(new Document("_id", userId));
         } catch (MongoException e) {
             // TODO: Implement logging
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -129,8 +129,8 @@ public class UserMongoService {
         result.setLastName(user.get("last_name").toString());
         result.setUsername(user.get("username").toString());
         result.setRole(user.get("role").toString().equals("admin")
-            ? UserResponse.RoleEnum.ADMIN
-            : UserResponse.RoleEnum.USER);
+                ? UserResponse.RoleEnum.ADMIN
+                : UserResponse.RoleEnum.USER);
         return new ResponseEntity<UserResponse>(result, HttpStatus.OK);
     }
 
@@ -145,8 +145,8 @@ public class UserMongoService {
             result.setLastName(doc.get("last_name").toString());
             result.setUsername(doc.get("username").toString());
             result.setRole(doc.get("role").toString().equals("admin")
-                ? UserResponse.RoleEnum.ADMIN
-                : UserResponse.RoleEnum.USER);
+                    ? UserResponse.RoleEnum.ADMIN
+                    : UserResponse.RoleEnum.USER);
             results.add(result);
         }
         return new ResponseEntity<List<UserResponse>>(results, HttpStatus.OK);
@@ -160,6 +160,4 @@ public class UserMongoService {
         }
         return new ResponseEntity<TokenInfoResponse>(response, HttpStatus.OK);
     }
-
-
 }
