@@ -1,10 +1,10 @@
 package edu.bbte.projectbluebook.datacatalog.users.util;
 
+import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,17 +58,30 @@ public class JwtUtil {
             .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 
-    public Boolean validateToken(String token, UserResponse userResponse) {
-        final Claims claims = extractAllClaims(token);
-        String username = extractUsername(claims);
-        String userId = extractUserId(claims);
-        String role = extractRole(claims);
-        Date expirationDate = extractExpiration(claims);
+    public TokenInfoResponse validateToken(String token) {
+        TokenInfoResponse response = new TokenInfoResponse();
+        try {
+            final Claims claims = extractAllClaims(token);
+            Date expirationDate = extractExpiration(claims);
+            String role = extractRole(claims);
+            response.setExp((int) expirationDate.getTime());
+            response.setIat((int)claims.getIssuedAt().getTime());
 
-        return username.equals(userResponse.getUsername())
-            && role.equals(userResponse.getRole().toString())
-            && userId.equals(userResponse.getId())
-            && !isTokenExpired(expirationDate);
+            if ("user".equals(role)) {
+                response.setRole(TokenInfoResponse.RoleEnum.USER);
+            } else if ("admin".equals(role)) {
+                response.setRole(TokenInfoResponse.RoleEnum.ADMIN);
+            } else {
+                throw new JwtException("Unkown role");
+            }
+            response.setActive(!isTokenExpired(expirationDate));
+            response.setUserId(extractUserId(claims));
+            response.setUsername(extractUsername(claims));
+            return response;
+        } catch (JwtException ex) {
+            response.setActive(false);
+            return response;
+        }
     }
 
 }

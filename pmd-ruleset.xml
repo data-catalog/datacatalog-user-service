@@ -67,7 +67,7 @@
         <exclude name="UseUtilityClass"/>
         <exclude name="AbstractClassWithoutAnyMethod"/>
         <!-- <exclude name="TooManyFields"/> -->
-        <!-- <exclude name="CyclomaticComplexity"/> -->
+        <exclude name="CyclomaticComplexity"/>
         <exclude name="ExcessiveImports"/>
     </rule>
     <rule ref="category/java/design.xml/TooManyMethods">
