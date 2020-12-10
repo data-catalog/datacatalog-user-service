@@ -3,13 +3,12 @@ package edu.bbte.projectbluebook.datacatalog.users.util;
 import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
 import io.jsonwebtoken.*;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Service
+@Component
 public class JwtUtil {
 
     private static final String SECRET = "e87ad8981f954e17a622b8663db8520c";

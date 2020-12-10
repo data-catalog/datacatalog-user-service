@@ -11,12 +11,9 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +24,6 @@ public class UserMongoService {
     private UserMongoRepository repository;
     @Autowired
     private final Util utils = new Util();
-    @Autowired
-    private final JwtUtil jwtUtil;
-    
-    public UserMongoService(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
 
     public ResponseEntity<Void> createUser(@Valid UserRequest userRequest) {
         String email = userRequest.getEmail();
@@ -96,7 +87,7 @@ public class UserMongoService {
             response.setUser(userResponse);
 
             // SET JWT TOKEN HERE
-            String token = jwtUtil.generateToken(userResponse);
+            String token = utils.generateJwt(userResponse);
             response.setToken(token);
             return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
         }
@@ -159,8 +150,7 @@ public class UserMongoService {
     }
 
     public ResponseEntity<TokenInfoResponse> tokenInfo(@Valid String body) {
-        JwtUtil jwtUtil = new JwtUtil();
-        TokenInfoResponse response = jwtUtil.validateToken(body);
+        TokenInfoResponse response = utils.validateToken(body);
         if (response == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
