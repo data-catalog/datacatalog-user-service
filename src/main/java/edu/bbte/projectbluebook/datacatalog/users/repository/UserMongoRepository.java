@@ -38,4 +38,8 @@ public class UserMongoRepository {
     public Document delete(Document id) {
         return users.findOneAndDelete(id);
     }
+
+    public boolean isPresent(Document filter) {
+        return findByFilter(filter).first() != null;
+    }
 }
