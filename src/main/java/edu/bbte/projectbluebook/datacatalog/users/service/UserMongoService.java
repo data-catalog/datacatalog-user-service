@@ -5,7 +5,6 @@ import com.mongodb.client.FindIterable;
 import edu.bbte.projectbluebook.datacatalog.users.helpers.Util;
 import edu.bbte.projectbluebook.datacatalog.users.model.*;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserMongoRepository;
-import edu.bbte.projectbluebook.datacatalog.users.util.JwtUtil;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,14 +59,12 @@ public class UserMongoService {
     public ResponseEntity<UserLoginResponse> login(@Valid UserLoginRequest userLoginRequest) {
         String username = userLoginRequest.getUsername();
 
-
         if (!repository.isPresent(new Document("username",username))) {
             return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
         }
 
         Document user = repository.findByFilter(new Document("username", username))
-            .first();
-
+                .first();
 
         String password = userLoginRequest.getPassword();
         String hashed = user.get("password").toString();

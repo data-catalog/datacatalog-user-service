@@ -1,17 +1,16 @@
 package edu.bbte.projectbluebook.datacatalog.users;
 
+import edu.bbte.projectbluebook.datacatalog.users.helpers.Util;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserMongoRepository;
 import edu.bbte.projectbluebook.datacatalog.users.service.UserMongoService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.bson.Document;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
@@ -25,66 +24,57 @@ public class CreateUserTest {
     @MockBean
     private UserMongoRepository repository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @MockBean
+    private Util util;
 
     @Test
-    public void CreateUser_Success() {
+    public void createUser_Success() {
         UserRequest request = createRequest();
         Document email = new Document("email", request.getEmail());
         Document user = new Document("username", request.getUsername());
-        Document userToInsert = new Document();
         when(repository.isPresent(email)).thenReturn(false);
         when(repository.isPresent(user)).thenReturn(false);
-        when(passwordEncoder.encode("testpass")).thenReturn("hashedPass");
-
-        userToInsert.append("username", request.getUsername());
-        userToInsert.append("password", "hashedPass");
-        userToInsert.append("firstName", request.getFirstName());
-        userToInsert.append("lastName", request.getLastName());
-        userToInsert.append("email", request.getEmail());
-        userToInsert.append("role", request.getRole());
-
+        when(util.encodePassword("testpass")).thenReturn("hashedPass");
         when(repository.insert(any(Document.class))).thenReturn(true);
-        assertEquals("User Succesfully Createad"
-            ,new ResponseEntity<>(HttpStatus.CREATED),
-            service.createUser(request));
+        assertEquals("User Succesfully Createad",
+                new ResponseEntity<>(HttpStatus.CREATED),
+                service.createUser(request));
 
     }
 
     @Test
-    public void CreateUser_EmailAlreadyTaken() {
+    public void createUser_EmailAlreadyTaken() {
         UserRequest request = createRequest();
         Document email = new Document("email", request.getEmail());
         when(repository.isPresent(email)).thenReturn(true);
-        assertEquals("Email taken"
-            ,new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY)
-            ,service.createUser(request));
+        assertEquals("Email taken",
+                new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY),
+                service.createUser(request));
     }
 
     @Test
-    public void CreateUser_UserNameAlreadyTaken() {
+    public void createUser_UserNameAlreadyTaken() {
         UserRequest request = createRequest();
         Document userName = new Document("username", request.getUsername());
         Document email = new Document("email", request.getEmail());
         when(repository.isPresent(email)).thenReturn(false);
         when(repository.isPresent(userName)).thenReturn(true);
-        assertEquals("Username taken"
-            ,new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY)
-            ,service.createUser(request));
+        assertEquals("Username taken",
+                new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY),
+                service.createUser(request));
     }
 
     @Test
-    public void CreateUser_RepositoryError() {
+    public void createUser_RepositoryError() {
         UserRequest request = createRequest();
         Document userName = new Document("username", request.getEmail());
         Document email = new Document("email", request.getEmail());
         when(repository.isPresent(email)).thenReturn(false);
         when(repository.isPresent(userName)).thenReturn(false);
         when(repository.insert(any(Document.class))).thenReturn(false);
-        assertEquals("Repository error"
-            , new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY)
-            , service.createUser(request));
+        assertEquals("Repository error",
+                new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY),
+                service.createUser(request));
     }
 
     private UserRequest createRequest() {

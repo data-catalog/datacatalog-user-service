@@ -27,18 +27,18 @@ public class DeleteTest {
     public void delete_NotFound_MongoException() {
         String toDeleteId = "507f191e810c19729de860ea";
         Mockito.when(repository.delete(new Document("_id", toDeleteId))).thenThrow(MongoException.class);
-        assertEquals("NOT FOUND"
-            ,new ResponseEntity<>(HttpStatus.NOT_FOUND)
-            ,service.deleteUser(toDeleteId));
+        assertEquals("NOT FOUND",
+                new ResponseEntity<>(HttpStatus.NOT_FOUND),
+                service.deleteUser(toDeleteId));
     }
 
     @Test
     public void delete_NotFound_Null() {
         String toDeleteId = "507f191e810c19729de860ea";
         Mockito.when(repository.delete(new Document("_id", toDeleteId))).thenReturn(null);
-        assertEquals("NOT FOUND"
-            ,new ResponseEntity<>(HttpStatus.NOT_FOUND)
-            ,service.deleteUser(toDeleteId));
+        assertEquals("NOT FOUND",
+                new ResponseEntity<>(HttpStatus.NOT_FOUND),
+                service.deleteUser(toDeleteId));
     }
 
     @Test
@@ -46,9 +46,9 @@ public class DeleteTest {
         String toDeleteId = "507f191e810c19729de860ea";
         Mockito.when(repository.delete(new Document("_id", toDeleteId)))
                 .thenReturn(new Document("_id", "507f191e810c19729de860ea"));
-        assertEquals("NO_CONTENT"
-            ,new ResponseEntity<>(HttpStatus.NO_CONTENT)
-            ,service.deleteUser(toDeleteId));
+        assertEquals("NO_CONTENT",
+                new ResponseEntity<>(HttpStatus.NO_CONTENT),
+                service.deleteUser(toDeleteId));
     }
 
 }

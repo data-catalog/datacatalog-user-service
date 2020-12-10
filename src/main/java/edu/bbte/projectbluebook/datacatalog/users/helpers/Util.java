@@ -14,10 +14,7 @@ public class Util {
 
     private final SecureRandom secureRandom = new SecureRandom();
     private final PasswordEncoder passwordencoder = new BCryptPasswordEncoder(10, secureRandom);
-
     private final JwtUtil jwtUtil = new JwtUtil();
-    public Util() {
-    }
 
     public boolean isPasswordGood(CharSequence charSequence, String password) {
         return passwordencoder.matches(charSequence, password);

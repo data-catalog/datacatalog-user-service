@@ -13,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -29,7 +27,7 @@ public class GetUserTest {
     private UserMongoRepository repository;
 
     @Test
-    public void GetAsset_NotFound_ThrowsException() {
+    public void testGetAsset_NotFound_ThrowsException() {
         String userId = "507f191e810c19729de860ea";
         Document user = new Document("_id", new ObjectId(userId));
         user.append("email", "mail@example.com");
@@ -37,14 +35,6 @@ public class GetUserTest {
         user.append("last_append", "User");
         user.append("username", "test");
         user.append("role", "user");
-
-        UserResponse result = new UserResponse();
-        result.setRole(UserResponse.RoleEnum.USER);
-        result.setId(userId);
-        result.setEmail("mail@example.com");
-        result.setFirstName("Test");
-        result.setLastName("User");
-        result.setUsername("test");
 
         FindIterable<Document> iterable = mock(FindIterable.class);
         MongoCursor cursor = mock(MongoCursor.class);
@@ -54,13 +44,13 @@ public class GetUserTest {
         when(cursor.hasNext()).thenReturn(true).thenReturn(false);
         when(iterable.first()).thenThrow(IllegalArgumentException.class);
 
-        assertEquals("User Not Found"
-            ,new ResponseEntity<>(HttpStatus.NOT_FOUND),
-            service.getUser(userId));
+        assertEquals("User Not Found",
+                new ResponseEntity<>(HttpStatus.NOT_FOUND),
+                service.getUser(userId));
     }
 
     @Test
-    public void GetAsset_NotFound_NullDocument() {
+    public void testGetAsset_NotFound_NullDocument() {
         String userId = "507f191e810c19729de860ea";
         Document user = new Document("_id", new ObjectId(userId));
         user.append("email", "mail@example.com");
@@ -68,14 +58,6 @@ public class GetUserTest {
         user.append("last_append", "User");
         user.append("username", "test");
         user.append("role", "user");
-
-        UserResponse result = new UserResponse();
-        result.setRole(UserResponse.RoleEnum.USER);
-        result.setId(userId);
-        result.setEmail("mail@example.com");
-        result.setFirstName("Test");
-        result.setLastName("User");
-        result.setUsername("test");
 
         FindIterable<Document> iterable = mock(FindIterable.class);
         MongoCursor cursor = mock(MongoCursor.class);
@@ -85,13 +67,13 @@ public class GetUserTest {
         when(cursor.hasNext()).thenReturn(true).thenReturn(false);
         when(iterable.first()).thenReturn(null);
 
-        assertEquals("User Not Found"
-            ,new ResponseEntity<>(HttpStatus.NOT_FOUND),
-            service.getUser(userId));
+        assertEquals("User Not Found",
+                new ResponseEntity<>(HttpStatus.NOT_FOUND),
+                service.getUser(userId));
     }
 
     @Test
-    public void GetAsset_NotFound_Success() {
+    public void testGetAsset_NotFound_Success() {
         String userId = "507f191e810c19729de860ea";
         Document user = new Document("_id", new ObjectId(userId));
         user.append("email", "mail@example.com");
@@ -116,8 +98,8 @@ public class GetUserTest {
         when(cursor.hasNext()).thenReturn(true).thenReturn(false);
         when(iterable.first()).thenReturn(user);
 
-        assertEquals("User Found"
-            ,new ResponseEntity<>(result, HttpStatus.OK),
-            service.getUser(userId));
+        assertEquals("User Found",
+                new ResponseEntity<>(result, HttpStatus.OK),
+                service.getUser(userId));
     }
 }

@@ -20,7 +20,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
-
 @SpringBootTest
 public class GetUsersTest {
 
@@ -31,7 +30,7 @@ public class GetUsersTest {
     private UserMongoRepository repository;
 
     @Test
-    public void GetUsers_EmptyArray() {
+    public void testGetUsers_EmptyArray() {
 
         FindIterable<Document> iterable = mock(FindIterable.class);
         MongoCursor cursor = mock(MongoCursor.class);
@@ -41,15 +40,12 @@ public class GetUsersTest {
         when(cursor.hasNext()).thenReturn(false);
 
         assertEquals("Empty array.",
-            new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK),
-            service.getUsers());
+                new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK),
+                service.getUsers());
     }
 
     @Test
-    public void GetUsers_Success() {
-        List<UserResponse> result = new ArrayList<>();
-        FindIterable<Document> iterable = mock(FindIterable.class);
-        MongoCursor cursor = mock(MongoCursor.class);
+    public void testGetUsers_Success() {
 
         Document user1 = new Document("_id","507f191e810c19729de860ea");
         user1.append("email", "mail@example.com");
@@ -81,6 +77,8 @@ public class GetUsersTest {
         response2.setRole(UserResponse.RoleEnum.ADMIN);
         response2.setId("507f191e810c19729de861ea");
 
+        FindIterable<Document> iterable = mock(FindIterable.class);
+        MongoCursor cursor = mock(MongoCursor.class);
         when(repository.findAll()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(cursor);
         when(cursor.hasNext())
@@ -90,13 +88,13 @@ public class GetUsersTest {
         when(cursor.next())
             .thenReturn(user1)
             .thenReturn(user2);
-
+        List<UserResponse> result = new ArrayList<>();
         result.add(response1);
         result.add(response2);
 
         assertEquals("Array with data.",
-            new ResponseEntity<>(result, HttpStatus.OK),
-            service.getUsers());
+                new ResponseEntity<>(result, HttpStatus.OK),
+                service.getUsers());
     }
 
 }
