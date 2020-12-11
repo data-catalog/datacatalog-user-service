@@ -2,7 +2,7 @@ package edu.bbte.projectbluebook.datacatalog.users;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
-import edu.bbte.projectbluebook.datacatalog.users.helpers.Util;
+import edu.bbte.projectbluebook.datacatalog.users.util.UtilCollection;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
@@ -36,7 +36,7 @@ public class LoginTest {
     private PasswordEncoder passwordEncoder;
 
     @MockBean
-    private Util utils;
+    private UtilCollection utils;
 
     @Test
     public void login_InvalidUserName() {
@@ -107,7 +107,7 @@ public class LoginTest {
 
         when(utils.generateJwt(any(UserResponse.class))).thenReturn("token");
 
-        when(utils.isPasswordGood(any(CharSequence.class), anyString())).thenReturn(true);
+        when(utils.isPasswordGood(anyString(), anyString())).thenReturn(true);
 
         assertEquals("Login successful",
                 new ResponseEntity<>(userLoginResponse, HttpStatus.OK),

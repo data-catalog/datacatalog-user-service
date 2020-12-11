@@ -1,6 +1,6 @@
 package edu.bbte.projectbluebook.datacatalog.users;
 
-import edu.bbte.projectbluebook.datacatalog.users.helpers.Util;
+import edu.bbte.projectbluebook.datacatalog.users.util.UtilCollection;
 import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.service.UserMongoService;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class TokenInfoTest {
     private UserMongoService service;
 
     @MockBean
-    private Util utils;
+    private UtilCollection utils;
 
     @Test
     public void tokenInfo_BadRequest() {

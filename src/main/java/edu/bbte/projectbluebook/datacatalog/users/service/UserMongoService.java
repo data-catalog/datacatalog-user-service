@@ -2,7 +2,7 @@ package edu.bbte.projectbluebook.datacatalog.users.service;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
-import edu.bbte.projectbluebook.datacatalog.users.helpers.Util;
+import edu.bbte.projectbluebook.datacatalog.users.util.UtilCollection;
 import edu.bbte.projectbluebook.datacatalog.users.model.*;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserMongoRepository;
 import org.bson.Document;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class UserMongoService {
     @Autowired
     private UserMongoRepository repository;
     @Autowired
-    private final Util utils = new Util();
+    private final UtilCollection utils = new UtilCollection();
 
     public ResponseEntity<Void> createUser(@Valid UserRequest userRequest) {
         String email = userRequest.getEmail();
@@ -68,7 +67,7 @@ public class UserMongoService {
 
         String password = userLoginRequest.getPassword();
         String hashed = user.get("password").toString();
-        if (utils.isPasswordGood(hashed, password)) {
+        if (utils.isPasswordGood(password, hashed)) {
             // ADD USER TO RESPONSE
             UserResponse userResponse = new UserResponse();
             userResponse.setUsername(username);

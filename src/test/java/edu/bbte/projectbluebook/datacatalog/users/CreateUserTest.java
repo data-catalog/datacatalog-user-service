@@ -1,6 +1,6 @@
 package edu.bbte.projectbluebook.datacatalog.users;
 
-import edu.bbte.projectbluebook.datacatalog.users.helpers.Util;
+import edu.bbte.projectbluebook.datacatalog.users.util.UtilCollection;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserMongoRepository;
 import edu.bbte.projectbluebook.datacatalog.users.service.UserMongoService;
@@ -25,7 +25,7 @@ public class CreateUserTest {
     private UserMongoRepository repository;
 
     @MockBean
-    private Util util;
+    private UtilCollection utilCollection;
 
     @Test
     public void createUser_Success() {
@@ -34,7 +34,7 @@ public class CreateUserTest {
         Document user = new Document("username", request.getUsername());
         when(repository.isPresent(email)).thenReturn(false);
         when(repository.isPresent(user)).thenReturn(false);
-        when(util.encodePassword("testpass")).thenReturn("hashedPass");
+        when(utilCollection.encodePassword("testpass")).thenReturn("hashedPass");
         when(repository.insert(any(Document.class))).thenReturn(true);
         assertEquals("User Succesfully Createad",
                 new ResponseEntity<>(HttpStatus.CREATED),
