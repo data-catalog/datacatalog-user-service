@@ -2,20 +2,16 @@ package edu.bbte.projectbluebook.datacatalog.users.service;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
+import edu.bbte.projectbluebook.datacatalog.users.util.UtilCollection;
 import edu.bbte.projectbluebook.datacatalog.users.model.*;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserMongoRepository;
-import edu.bbte.projectbluebook.datacatalog.users.util.JwtUtil;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.validation.Valid;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,33 +20,27 @@ public class UserMongoService {
 
     @Autowired
     private UserMongoRepository repository;
-
-    private final JwtUtil jwtUtil = new JwtUtil();
-    private final SecureRandom secureRandom = new SecureRandom();
-    private final PasswordEncoder passwordencoder = new BCryptPasswordEncoder(10, secureRandom);
+    @Autowired
+    private final UtilCollection utils = new UtilCollection();
 
     public ResponseEntity<Void> createUser(@Valid UserRequest userRequest) {
         String email = userRequest.getEmail();
         // Checking if email is unique
         Document emailDocument = new Document("email", email);
-        Document userEmail = repository.findByFilter(emailDocument)
-                .first();
-        if (userEmail != null) {
+        if (repository.isPresent(emailDocument)) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         // Checking if username is unique
         String username = userRequest.getUsername();
         Document usernameDocument = new Document("username", username);
-        Document userName = repository.findByFilter(usernameDocument)
-                .first();
-        if (userName != null) {
+        if (repository.isPresent(usernameDocument)) {
             return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         // If email and username are unique then register the new user
         // hash + salt password with BCrypt
-        String hashAndSalt = passwordencoder.encode(userRequest.getPassword());
+        String hashAndSalt = utils.encodePassword(userRequest.getPassword());
         Document user = new Document();
         user.append("email", email);
         user.append("username", username);
@@ -59,7 +49,8 @@ public class UserMongoService {
         user.append("role", userRequest.getRole().toString());
         user.append("password", hashAndSalt);
 
-        return repository.insert(user)
+        boolean result = repository.insert(user);
+        return result
             ? new ResponseEntity<>(HttpStatus.CREATED)
             : new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
     }
@@ -67,14 +58,16 @@ public class UserMongoService {
     public ResponseEntity<UserLoginResponse> login(@Valid UserLoginRequest userLoginRequest) {
         String username = userLoginRequest.getUsername();
 
-        Document user = repository.findByFilter(new Document("username", username))
-                .first();
-        if (user == null) {
+        if (!repository.isPresent(new Document("username",username))) {
             return new ResponseEntity<UserLoginResponse>(HttpStatus.UNAUTHORIZED);
         }
+
+        Document user = repository.findByFilter(new Document("username", username))
+                .first();
+
         String password = userLoginRequest.getPassword();
         String hashed = user.get("password").toString();
-        if (passwordencoder.matches(password, hashed)) {
+        if (utils.isPasswordGood(password, hashed)) {
             // ADD USER TO RESPONSE
             UserResponse userResponse = new UserResponse();
             userResponse.setUsername(username);
@@ -90,7 +83,7 @@ public class UserMongoService {
             response.setUser(userResponse);
 
             // SET JWT TOKEN HERE
-            String token = jwtUtil.generateToken(userResponse);
+            String token = utils.generateJwt(userResponse);
             response.setToken(token);
             return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
         }
@@ -153,8 +146,7 @@ public class UserMongoService {
     }
 
     public ResponseEntity<TokenInfoResponse> tokenInfo(@Valid String body) {
-        JwtUtil jwtUtil = new JwtUtil();
-        TokenInfoResponse response = jwtUtil.validateToken(body);
+        TokenInfoResponse response = utils.validateToken(body);
         if (response == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
