@@ -37,7 +37,7 @@ stages:
               jdkArchitectureOption: "x64"
               publishJUnitResults: true
               testResultsFiles: "**/TEST-*.xml"
-              tasks: "assemble"
+              tasks: "check"
           - task: Docker@1
             displayName: "Build Container Image"
             inputs:
