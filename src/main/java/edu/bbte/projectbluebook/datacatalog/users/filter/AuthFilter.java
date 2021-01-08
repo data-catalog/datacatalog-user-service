@@ -24,7 +24,7 @@ public class AuthFilter implements Filter {
         String method = httpRequest.getMethod();
 
         // Check for login / register endpoints or token info
-       if (isRegisterOrLogin(method, uri) || uri.startsWith("/token_info")) {
+        if (isRegisterOrLogin(method, uri)) {
             chain.doFilter(httpRequest, httpServletResponse);
             return;
         }
@@ -75,7 +75,10 @@ public class AuthFilter implements Filter {
     }
 
     private boolean isRegisterOrLogin(String method, String uri) {
-        return "POST".equals(method.toUpperCase(new Locale("en", "US"))) && uri.startsWith("/users");
+        boolean first = "POST".equals(method.toUpperCase(new Locale("en", "US")))
+                && uri.startsWith("/users");
+        boolean second = uri.startsWith("/token_info");
+        return first || second;
     }
 
 }
