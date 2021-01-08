@@ -23,8 +23,8 @@ public class AuthFilter implements Filter {
         String uri = httpRequest.getRequestURI();
         String method = httpRequest.getMethod();
 
-        // Check for login / register endpoints
-        if (isRegisterOrLogin(method, uri)) {
+        // Check for login / register endpoints or token info
+       if (isRegisterOrLogin(method, uri) || uri.startsWith("/token_info")) {
             chain.doFilter(httpRequest, httpServletResponse);
             return;
         }
@@ -48,7 +48,7 @@ public class AuthFilter implements Filter {
         // DELETE endpoint(s)
         TokenInfoResponse.RoleEnum role = tokenValidation.getRole();
         if ("DELETE".equals(method.toUpperCase(new Locale("en", "US")))) {
-            if (role == TokenInfoResponse.RoleEnum.ADMIN) {
+            if (role.equals(TokenInfoResponse.RoleEnum.ADMIN)) {
                 chain.doFilter(httpRequest, httpServletResponse);
             } else {
                 sendResponse(401,"Unauthorized", httpServletResponse);
@@ -58,7 +58,7 @@ public class AuthFilter implements Filter {
 
         // GET /users and GET users/{userId}
         if ("GET".equals(method.toUpperCase(new Locale("en", "US"))) && uri.startsWith("/users")) {
-            if (role == TokenInfoResponse.RoleEnum.ADMIN) {
+            if (role.equals(TokenInfoResponse.RoleEnum.ADMIN)) {
                 chain.doFilter(httpRequest, httpServletResponse);
             } else {
                 sendResponse(401,"Unauthorized", httpServletResponse);
