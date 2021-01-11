@@ -12,7 +12,6 @@ pool:
 steps:
   - task: Gradle@2
     inputs:
-<<<<<<< HEAD
       workingDirectory: ""
       gradleWrapperFile: "gradlew"
       gradleOptions: "-Xmx3072m"
@@ -22,17 +21,7 @@ steps:
       publishJUnitResults: true
       testResultsFiles: "**/TEST-*.xml"
       tasks: "fatJar"
-=======
-      workingDirectory: ''
-      gradleWrapperFile: 'gradlew'
-      gradleOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.8'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: false
-      testResultsFiles: '**/TEST-*.xml'
-      tasks: 'build fatJar'
->>>>>>> spring-cloud
+
 
   - task: AzureCLI@1
     inputs:
