@@ -3,6 +3,7 @@ package edu.bbte.projectbluebook.datacatalog.users.util;
 import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Map;
@@ -11,7 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET = "e87ad8981f954e17a622b8663db8520c";
+    private static  String secret;
+
+    @Value("${jwt.secret}")
+    public void setKey(String secretProperty) {
+        secret = secretProperty;
+    }
 
     public String extractUsername(Claims claims) {
         return claims.get("username").toString();
@@ -31,7 +37,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-            .setSigningKey(SECRET)
+            .setSigningKey(secret)
             .parseClaimsJws(token)
             .getBody();
     }
@@ -54,7 +60,7 @@ public class JwtUtil {
             .setHeaderParam("typ", "JWT")
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 172800000))
-            .signWith(SignatureAlgorithm.HS256, SECRET).compact();
+            .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     public TokenInfoResponse validateToken(String token) {
