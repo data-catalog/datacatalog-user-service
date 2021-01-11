@@ -12,12 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class JwtUtil {
 
-    private static  String secret;
-
     @Value("${jwt.secret}")
-    public void setKey(String secretProperty) {
-        secret = secretProperty;
-    }
+    private String secret;
 
     public String extractUsername(Claims claims) {
         return claims.get("username").toString();
