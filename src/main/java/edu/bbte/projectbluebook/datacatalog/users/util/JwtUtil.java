@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+
+    private final String SECRET = "e87ad8981f954e17a622b8663db8520c";
 
     public String extractUsername(Claims claims) {
         return claims.get("username").toString();
@@ -33,7 +33,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-            .setSigningKey(secret)
+            .setSigningKey(SECRET)
             .parseClaimsJws(token)
             .getBody();
     }
@@ -56,7 +56,7 @@ public class JwtUtil {
             .setHeaderParam("typ", "JWT")
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 172800000))
-            .signWith(SignatureAlgorithm.HS256, secret).compact();
+            .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 
     public TokenInfoResponse validateToken(String token) {
