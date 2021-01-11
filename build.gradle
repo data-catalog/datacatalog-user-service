@@ -60,6 +60,15 @@ dependencies {
 		dependsOn test // tests are required to run before generating the report
 	}
 
+	task fatJar(type: Jar) {
+		manifest {
+			attributes 'Main-Class': 'edu.bbbte.idde.projectbluebook.datacatalog.users.DatacatalogApplication'
+		}
+		baseName = 'all-in-one-jar'
+		from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+		with jar
+	}
+
 
 	openApiGenerate {
 		inputSpec = "$rootDir/src/main/resources/api/User.yaml".toString()
