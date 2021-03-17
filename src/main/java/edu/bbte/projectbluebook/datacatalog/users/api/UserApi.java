@@ -5,11 +5,8 @@
  */
 package edu.bbte.projectbluebook.datacatalog.users.api;
 
-import edu.bbte.projectbluebook.datacatalog.users.model.TokenInfoResponse;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginRequest;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserLoginResponse;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserRequest;
-import edu.bbte.projectbluebook.datacatalog.users.model.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -36,162 +35,104 @@ import java.util.Optional;
 @Api(value = "User", description = "the User API")
 public interface UserApi {
 
-    default Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
-    }
-
     /**
-     * POST /users
+     * POST /users : Create a User
      * Create new user (registration).
      *
-     * @param userRequest User information for registration. (optional)
-     * @return New user created. (status code 201)
+     * @param userCreationRequest User information for registration. (optional)
+     * @return Created (status code 201)
      *         or Unprocessable entity. (status code 422)
      */
-    @ApiOperation(value = "", nickname = "createUser", notes = "Create new user (registration).", tags={ "User", })
+    @ApiOperation(value = "Create a User", nickname = "createUser", notes = "Create new user (registration).", tags={ "User", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 201, message = "New user created."),
+        @ApiResponse(code = 201, message = "Created"),
         @ApiResponse(code = 422, message = "Unprocessable entity.") })
     @RequestMapping(value = "/users",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<Void> createUser(@ApiParam(value = "User information for registration."  )  @Valid @RequestBody(required = false) UserRequest userRequest) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    default Mono<ResponseEntity<Void>> createUser(@ApiParam(value = "User information for registration."  )  @Valid @RequestBody(required = false) Mono<UserCreationRequest> userCreationRequest, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        return result.then(Mono.empty());
 
     }
 
 
     /**
-     * DELETE /users/{userId}
+     * DELETE /users/{userId} : Delete a User
      * Delete a specific user
      *
      * @param userId Unique identifier for user (required)
      * @return User deleted (status code 204)
      */
-    @ApiOperation(value = "", nickname = "deleteUser", notes = "Delete a specific user", tags={ "User", })
+    @ApiOperation(value = "Delete a User", nickname = "deleteUser", notes = "Delete a specific user", authorizations = {
+        @Authorization(value = "JWT")
+    }, tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 204, message = "User deleted") })
     @RequestMapping(value = "/users/{userId}",
         method = RequestMethod.DELETE)
-    default ResponseEntity<Void> deleteUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    default Mono<ResponseEntity<Void>> deleteUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        return result.then(Mono.empty());
 
     }
 
 
     /**
-     * GET /users/{userId} : Your GET endpoint
+     * GET /users/{userId} : Get a User
      * Get user by ID
      *
      * @param userId Unique identifier for user (required)
      * @return OK (status code 200)
      *         or User not found (status code 404)
      */
-    @ApiOperation(value = "Your GET endpoint", nickname = "getUser", notes = "Get user by ID", response = UserResponse.class, tags={ "User", })
+    @ApiOperation(value = "Get a User", nickname = "getUser", notes = "Get user by ID", response = UserResponse.class, tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = UserResponse.class),
         @ApiResponse(code = 404, message = "User not found") })
     @RequestMapping(value = "/users/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<UserResponse> getUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "null";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
+    default Mono<ResponseEntity<UserResponse>> getUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
+            if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                result = ApiUtil.getExampleResponse(exchange, exampleString);
+                break;
             }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
+        return result.then(Mono.empty());
 
     }
 
 
     /**
-     * GET /users : Your GET endpoint
+     * GET /users : Get all Users
      * Get all users.
      *
      * @return OK (status code 200)
      */
-    @ApiOperation(value = "Your GET endpoint", nickname = "getUsers", notes = "Get all users.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
+    @ApiOperation(value = "Get all Users", nickname = "getUsers", notes = "Get all users.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = UserResponse.class, responseContainer = "List") })
     @RequestMapping(value = "/users",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<UserResponse>> getUsers() {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "null";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
+    default Mono<ResponseEntity<Flux<UserResponse>>> getUsers(ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
+            if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                result = ApiUtil.getExampleResponse(exchange, exampleString);
+                break;
             }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * POST /users/login
-     * Log user into the system.
-     *
-     * @param userLoginRequest  (optional)
-     * @return OK (status code 200)
-     *         or Authentication failed. The username or password is not correct. (status code 401)
-     */
-    @ApiOperation(value = "", nickname = "login", notes = "Log user into the system.", response = UserLoginResponse.class, tags={ "User", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = UserLoginResponse.class),
-        @ApiResponse(code = 401, message = "Authentication failed. The username or password is not correct.") })
-    @RequestMapping(value = "/users/login",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    default ResponseEntity<UserLoginResponse> login(@ApiParam(value = ""  )  @Valid @RequestBody(required = false) UserLoginRequest userLoginRequest) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"token\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODUxNDA5ODQsImlhdCI6MTQ4NTEzNzM4NCwiaXNzIjoiYWNtZS5jb20iLCJzdWIiOiIyOWFjMGMxOC0wYjRhLTQyY2YtODJmYy0wM2Q1NzAzMThhMWQiLCJhcHBsaWNhdGlvbklkIjoiNzkxMDM3MzQtOTdhYi00ZDFhLWFmMzctZTAwNmQwNWQyOTUyIiwic\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * POST /token_info
-     * It provides information about the token.
-     *
-     * @param body Contains the token. (optional)
-     * @return OK (status code 200)
-     */
-    @ApiOperation(value = "", nickname = "tokenInfo", notes = "It provides information about the token.", response = TokenInfoResponse.class, tags={ "User", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = TokenInfoResponse.class) })
-    @RequestMapping(value = "/token_info",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    default ResponseEntity<TokenInfoResponse> tokenInfo(@ApiParam(value = "Contains the token."  )  @Valid @RequestBody(required = false) String body) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"role\" : \"user\", \"active\" : true, \"exp\" : 1437275311, \"userId\" : \"userId\", \"iat\" : 1419350238, \"username\" : \"user1\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
+        return result.then(Mono.empty());
 
     }
 

@@ -1,5 +1,3 @@
-// Ez a példa statikus kódellenőrzők használatát mutatja be.
-
 buildscript {
     repositories {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -44,15 +42,13 @@ pmd {
 }
 
 checkstyleMain
-        .exclude("edu/bbte/projectbluebook/datacatalog/users/model/*")
+        .exclude("edu/bbte/projectbluebook/datacatalog/users/model/dto/*")
         .exclude("edu/bbte/projectbluebook/datacatalog/users/api/*")
-        .exclude("edu/bbte/projectbluebook/datacatalog/users/config/*")
         .exclude("edu/bbte/projectbluebook/datacatalog/users/RFC3339DateFormat.java")
 
 pmdMain
-        .exclude("edu/bbte/projectbluebook/datacatalog/users/model/*")
+        .exclude("edu/bbte/projectbluebook/datacatalog/users/model/dto/*")
         .exclude("edu/bbte/projectbluebook/datacatalog/users/api/*")
-        .exclude("edu/bbte/projectbluebook/datacatalog/users/config/*")
         .exclude("edu/bbte/projectbluebook/datacatalog/users/RFC3339DateFormat.java")
 
 task violations(type: se.bjurr.violations.gradle.plugin.ViolationsTask) {
