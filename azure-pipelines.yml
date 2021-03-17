@@ -19,6 +19,7 @@ stages:
         steps:
          
           - task: Gradle@2
+            displayName: "Rung Gradle Check"
             inputs:
               workingDirectory: ""
               gradleWrapperFile: "gradlew"
