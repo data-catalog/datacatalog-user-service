@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -54,6 +56,12 @@ public class UserService {
 
     public Flux<UserResponse> getUsers() {
         return repository.findAll()
+                .map(mapper::modelToResponseDto)
+                .onErrorMap(err -> new UserServiceException("Users could not be retrieved."));
+    }
+
+    public Flux<UserResponse> getManyUsersByIds(List<String> ids) {
+        return repository.findAllByIdIn(ids)
                 .map(mapper::modelToResponseDto)
                 .onErrorMap(err -> new UserServiceException("Users could not be retrieved."));
     }

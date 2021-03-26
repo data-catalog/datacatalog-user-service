@@ -13,6 +13,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 public class UserController implements UserApi {
@@ -49,6 +51,13 @@ public class UserController implements UserApi {
     @Override
     public Mono<ResponseEntity<Flux<UserResponse>>> getUsers(ServerWebExchange exchange) {
         return Mono.just(service.getUsers())
+                .map(ResponseEntity::ok);
+    }
+
+    @Override
+    public Mono<ResponseEntity<Flux<UserResponse>>> getManyUsersById(@NotNull @Valid List<String> ids,
+                                                                     ServerWebExchange exchange) {
+        return Mono.just(service.getManyUsersByIds(ids))
                 .map(ResponseEntity::ok);
     }
 }

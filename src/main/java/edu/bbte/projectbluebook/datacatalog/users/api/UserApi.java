@@ -81,6 +81,34 @@ public interface UserApi {
 
 
     /**
+     * GET /users/show_many : Get Many Users by ID
+     * Returns all of the users with the specified IDs.
+     *
+     * @param ids A comma separated list of ids to query. (required)
+     * @return OK (status code 200)
+     */
+    @ApiOperation(value = "Get Many Users by ID", nickname = "getManyUsersById", notes = "Returns all of the users with the specified IDs.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "OK", response = UserResponse.class, responseContainer = "List") })
+    @RequestMapping(value = "/users/show_many",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default Mono<ResponseEntity<Flux<UserResponse>>> getManyUsersById(@NotNull @ApiParam(value = "A comma separated list of ids to query.", required = true) @Valid @RequestParam(value = "ids", required = true) List<String> ids, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
+            if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                result = ApiUtil.getExampleResponse(exchange, exampleString);
+                break;
+            }
+        }
+        return result.then(Mono.empty());
+
+    }
+
+
+    /**
      * GET /users/{userId} : Get a User
      * Get user by ID
      *
