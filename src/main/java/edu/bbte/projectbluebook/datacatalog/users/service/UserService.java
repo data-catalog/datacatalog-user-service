@@ -65,4 +65,12 @@ public class UserService {
                 .map(mapper::modelToResponseDto)
                 .onErrorMap(err -> new UserServiceException("Users could not be retrieved."));
     }
+
+    public Mono<UserResponse> getUserByUsername(String username) {
+        return repository
+                .findByUsername(username)
+                .map(mapper::modelToResponseDto)
+                .onErrorMap(err -> new UserServiceException("User could not be retrieved."))
+                .switchIfEmpty(Mono.error(new NotFoundException("User not found.")));
+    }
 }

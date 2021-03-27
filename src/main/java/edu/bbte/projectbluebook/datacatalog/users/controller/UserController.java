@@ -60,4 +60,11 @@ public class UserController implements UserApi {
         return Mono.just(service.getManyUsersByIds(ids))
                 .map(ResponseEntity::ok);
     }
+
+    @Override
+    public Mono<ResponseEntity<UserResponse>> getUserByUsername(String username, ServerWebExchange exchange) {
+        return service
+                .getUserByUsername(username)
+                .map(ResponseEntity::ok);
+    }
 }

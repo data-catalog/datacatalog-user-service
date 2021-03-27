@@ -139,6 +139,36 @@ public interface UserApi {
 
 
     /**
+     * GET /users/username/{username} : Get User by Username
+     * Returns the user with the specified username.
+     *
+     * @param username The username of the user. (required)
+     * @return OK (status code 200)
+     *         or Not Found (status code 404)
+     */
+    @ApiOperation(value = "Get User by Username", nickname = "getUserByUsername", notes = "Returns the user with the specified username.", response = UserResponse.class, tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "OK", response = UserResponse.class),
+        @ApiResponse(code = 404, message = "Not Found") })
+    @RequestMapping(value = "/users/username/{username}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default Mono<ResponseEntity<UserResponse>> getUserByUsername(@ApiParam(value = "The username of the user.",required=true) @PathVariable("username") String username, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
+            if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                result = ApiUtil.getExampleResponse(exchange, exampleString);
+                break;
+            }
+        }
+        return result.then(Mono.empty());
+
+    }
+
+
+    /**
      * GET /users : Get all Users
      * Get all users.
      *
