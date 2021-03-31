@@ -10,5 +10,7 @@ import java.util.List;
 public interface UserRepository extends ReactiveMongoRepository<User, String> {
     Mono<User> findByUsername(String username);
 
+    Flux<User> findAllByUsernameContainingIgnoreCase(String username);
+
     Flux<User> findAllByIdIn(List<String> ids);
 }

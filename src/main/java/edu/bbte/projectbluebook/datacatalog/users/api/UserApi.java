@@ -194,4 +194,32 @@ public interface UserApi {
 
     }
 
+
+    /**
+     * GET /users/search/{searchTerm} : Search Users by Username
+     * Returns the users which usernames contain the searchTerm.
+     *
+     * @param searchTerm The search term. (required)
+     * @return OK (status code 200)
+     */
+    @ApiOperation(value = "Search Users by Username", nickname = "searchUsers", notes = "Returns the users which usernames contain the searchTerm.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "OK", response = UserResponse.class, responseContainer = "List") })
+    @RequestMapping(value = "/users/search/{searchTerm}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default Mono<ResponseEntity<Flux<UserResponse>>> searchUsers(@ApiParam(value = "The search term.",required=true, defaultValue="") @PathVariable("searchTerm") String searchTerm, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
+            if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                result = ApiUtil.getExampleResponse(exchange, exampleString);
+                break;
+            }
+        }
+        return result.then(Mono.empty());
+
+    }
+
 }

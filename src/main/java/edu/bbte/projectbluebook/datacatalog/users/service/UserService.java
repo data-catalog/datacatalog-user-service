@@ -73,4 +73,11 @@ public class UserService {
                 .onErrorMap(err -> new UserServiceException("User could not be retrieved."))
                 .switchIfEmpty(Mono.error(new NotFoundException("User not found.")));
     }
+
+    public Flux<UserResponse> searchUsers(String searchTerm) {
+        return repository
+                .findAllByUsernameContainingIgnoreCase(searchTerm)
+                .map(mapper::modelToResponseDto)
+                .onErrorMap(err -> new UserServiceException("User could not be retrieved."));
+    }
 }

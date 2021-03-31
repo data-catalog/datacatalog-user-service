@@ -62,6 +62,12 @@ public class UserController implements UserApi {
     }
 
     @Override
+    public Mono<ResponseEntity<Flux<UserResponse>>> searchUsers(String searchTerm, ServerWebExchange exchange) {
+        return Mono.just(service.searchUsers(searchTerm))
+                .map(ResponseEntity::ok);
+    }
+
+    @Override
     public Mono<ResponseEntity<UserResponse>> getUserByUsername(String username, ServerWebExchange exchange) {
         return service
                 .getUserByUsername(username)
