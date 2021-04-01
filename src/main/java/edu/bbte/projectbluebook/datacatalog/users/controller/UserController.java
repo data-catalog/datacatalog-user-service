@@ -3,6 +3,8 @@ package edu.bbte.projectbluebook.datacatalog.users.controller;
 import edu.bbte.projectbluebook.datacatalog.users.api.UserApi;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserRoleUpdateRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserUpdateRequest;
 import edu.bbte.projectbluebook.datacatalog.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,23 @@ public class UserController implements UserApi {
         return service
                 .deleteUser(userId)
                 .map(nothing -> ResponseEntity.noContent().build());
+    }
+
+    @Override
+    public Mono<ResponseEntity<Void>> updateUser(String userId, @Valid Mono<UserUpdateRequest> userUpdateRequest,
+                                                 ServerWebExchange exchange) {
+        return service
+                .updateUser(userId, userUpdateRequest)
+                .map(voidd -> ResponseEntity.noContent().build());
+    }
+
+    @Override
+    public Mono<ResponseEntity<Void>> modifyUserRole(String userId,
+                                                     @Valid Mono<UserRoleUpdateRequest> userRoleUpdateRequest,
+                                                     ServerWebExchange exchange) {
+        return service
+                .modifyUserRole(userId, userRoleUpdateRequest)
+                .map(voidd -> ResponseEntity.noContent().build());
     }
 
     @Override

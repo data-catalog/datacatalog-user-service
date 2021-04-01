@@ -4,8 +4,8 @@ import edu.bbte.projectbluebook.datacatalog.users.model.User;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserLoginResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserUpdateRequest;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
@@ -15,4 +15,7 @@ public abstract class UserMapper {
     public abstract UserResponse modelToResponseDto(User user);
 
     public abstract UserLoginResponse modelToLoginResponse(User user, String token);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    public abstract User updateModelFromDto(@MappingTarget User asset, UserUpdateRequest userUpdateRequest);
 }

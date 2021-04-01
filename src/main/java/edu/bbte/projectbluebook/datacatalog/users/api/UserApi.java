@@ -7,6 +7,8 @@ package edu.bbte.projectbluebook.datacatalog.users.api;
 
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserRoleUpdateRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserUpdateRequest;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -196,6 +198,32 @@ public interface UserApi {
 
 
     /**
+     * PUT /users/{userId}/role : Modify User Role by ID
+     * Modifies the user&#39;s role.
+     *
+     * @param userId The id of the user. (required)
+     * @param userRoleUpdateRequest  (optional)
+     * @return No Content (status code 204)
+     *         or Not Found (status code 404)
+     */
+    @ApiOperation(value = "Modify User Role by ID", nickname = "modifyUserRole", notes = "Modifies the user's role.", authorizations = {
+        @Authorization(value = "JWT")
+    }, tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 404, message = "Not Found") })
+    @RequestMapping(value = "/users/{userId}/role",
+        consumes = { "application/json" },
+        method = RequestMethod.PUT)
+    default Mono<ResponseEntity<Void>> modifyUserRole(@ApiParam(value = "The id of the user.",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserRoleUpdateRequest> userRoleUpdateRequest, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+        return result.then(Mono.empty());
+
+    }
+
+
+    /**
      * GET /users/search/{searchTerm} : Search Users by Username
      * Returns the users which usernames contain the searchTerm.
      *
@@ -218,6 +246,32 @@ public interface UserApi {
                 break;
             }
         }
+        return result.then(Mono.empty());
+
+    }
+
+
+    /**
+     * PATCH /users/{userId} : Update User by ID
+     * Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint.
+     *
+     * @param userId Unique identifier for user (required)
+     * @param userUpdateRequest  (optional)
+     * @return No Content (status code 204)
+     *         or Not Found (status code 404)
+     */
+    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint.", authorizations = {
+        @Authorization(value = "JWT")
+    }, tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 404, message = "Not Found") })
+    @RequestMapping(value = "/users/{userId}",
+        consumes = { "application/json" },
+        method = RequestMethod.PATCH)
+    default Mono<ResponseEntity<Void>> updateUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserUpdateRequest> userUpdateRequest, ServerWebExchange exchange) {
+        Mono<Void> result = Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());
 
     }

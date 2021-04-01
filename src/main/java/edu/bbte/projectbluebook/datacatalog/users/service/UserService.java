@@ -5,6 +5,8 @@ import edu.bbte.projectbluebook.datacatalog.users.exception.NotFoundException;
 import edu.bbte.projectbluebook.datacatalog.users.exception.UserServiceException;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserRoleUpdateRequest;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserUpdateRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.mapper.UserMapper;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +81,31 @@ public class UserService {
                 .findAllByUsernameContainingIgnoreCase(searchTerm)
                 .map(mapper::modelToResponseDto)
                 .onErrorMap(err -> new UserServiceException("User could not be retrieved."));
+    }
+
+    public Mono<Void> updateUser(String userId, Mono<UserUpdateRequest> userRequest) {
+        return repository
+                .findById(userId)
+                .switchIfEmpty(Mono.error(new NotFoundException("User not found.")))
+                .zipWith(userRequest)
+                .map(tuple -> mapper.updateModelFromDto(tuple.getT1(), tuple.getT2()))
+                .flatMap(repository::save)
+                .then()
+                .onErrorMap(err -> new UserServiceException("User could not be updated."));
+    }
+
+    public Mono<Void> modifyUserRole(String userId, Mono<UserRoleUpdateRequest> userRoleUpdateRequest) {
+        Mono<String> roleMono = userRoleUpdateRequest.map(request -> request.getRole().toString());
+
+        return repository.findById(userId)
+                .switchIfEmpty(Mono.error(new NotFoundException("User not found.")))
+                .zipWith(roleMono)
+                .map(tuple -> {
+                    tuple.getT1().setRole(tuple.getT2());
+                    return tuple.getT1();
+                })
+                .flatMap(repository::save)
+                .then()
+                .onErrorMap(err -> new UserServiceException("User's role could not be updated."));
     }
 }
