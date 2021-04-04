@@ -85,7 +85,14 @@ public class UserService {
 
     public Mono<Void> updateUser(String userId, Mono<UserUpdateRequest> userRequest) {
         Mono<UserUpdateRequest> requestMono = userRequest
-                .map(request -> request.password(passwordEncoder.encode(request.getPassword())));
+                .map(request -> {
+                    String password = request.getPassword();
+                    if (password != null) {
+                        request.setPassword(passwordEncoder.encode(password));
+                    }
+
+                    return request;
+                });
 
         return repository
                 .findById(userId)
