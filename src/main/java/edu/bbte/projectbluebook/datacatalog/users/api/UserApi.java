@@ -253,14 +253,14 @@ public interface UserApi {
 
     /**
      * PATCH /users/{userId} : Update User by ID
-     * Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint.
+     * Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.
      *
      * @param userId Unique identifier for user (required)
      * @param userUpdateRequest  (optional)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
      */
-    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint.", authorizations = {
+    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.", authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 

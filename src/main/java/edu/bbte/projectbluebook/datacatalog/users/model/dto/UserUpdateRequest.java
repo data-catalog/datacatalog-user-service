@@ -26,9 +26,6 @@ public class UserUpdateRequest  implements Serializable {
   @JsonProperty("lastName")
   private String lastName;
 
-  @JsonProperty("username")
-  private String username;
-
   @JsonProperty("password")
   private String password;
 
@@ -92,26 +89,6 @@ public class UserUpdateRequest  implements Serializable {
     this.lastName = lastName;
   }
 
-  public UserUpdateRequest username(String username) {
-    this.username = username;
-    return this;
-  }
-
-  /**
-   * Get username
-   * @return username
-  */
-  @ApiModelProperty(example = "User1", value = "")
-
-@Size(min=3) 
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
   public UserUpdateRequest password(String password) {
     this.password = password;
     return this;
@@ -145,13 +122,12 @@ public class UserUpdateRequest  implements Serializable {
     return Objects.equals(this.email, userUpdateRequest.email) &&
         Objects.equals(this.firstName, userUpdateRequest.firstName) &&
         Objects.equals(this.lastName, userUpdateRequest.lastName) &&
-        Objects.equals(this.username, userUpdateRequest.username) &&
         Objects.equals(this.password, userUpdateRequest.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, firstName, lastName, username, password);
+    return Objects.hash(email, firstName, lastName, password);
   }
 
   @Override
@@ -162,7 +138,6 @@ public class UserUpdateRequest  implements Serializable {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
     return sb.toString();

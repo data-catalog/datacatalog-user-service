@@ -84,10 +84,13 @@ public class UserService {
     }
 
     public Mono<Void> updateUser(String userId, Mono<UserUpdateRequest> userRequest) {
+        Mono<UserUpdateRequest> requestMono = userRequest
+                .map(request -> request.password(passwordEncoder.encode(request.getPassword())));
+
         return repository
                 .findById(userId)
                 .switchIfEmpty(Mono.error(new NotFoundException("User not found.")))
-                .zipWith(userRequest)
+                .zipWith(requestMono)
                 .map(tuple -> mapper.updateModelFromDto(tuple.getT1(), tuple.getT2()))
                 .flatMap(repository::save)
                 .then()
