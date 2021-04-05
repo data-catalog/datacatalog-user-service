@@ -2,7 +2,6 @@ package edu.bbte.projectbluebook.datacatalog.users.service;
 
 import com.mongodb.DuplicateKeyException;
 import edu.bbte.projectbluebook.datacatalog.users.exception.NotFoundException;
-import edu.bbte.projectbluebook.datacatalog.users.exception.UserServiceException;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserRoleUpdateRequest;
@@ -38,49 +37,42 @@ public class UserService {
                 .map(user -> mapper.modelToResponseDto(user))
                 .onErrorMap(DuplicateKeyException.class, err ->
                         new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-                                "Username or e-mail address is already used."))
-                .onErrorMap(err -> new UserServiceException("User could not be created."));
+                                "Username or e-mail address is already used."));
     }
 
     public Mono<Void> deleteUser(String userId) {
         return repository
-                .deleteById(userId)
-                .onErrorMap(err -> new UserServiceException("User could not be deleted."));
+                .deleteById(userId);
     }
 
     public Mono<UserResponse> getUser(String userId) {
         return repository
                 .findById(userId)
                 .map(mapper::modelToResponseDto)
-                .onErrorMap(err -> new UserServiceException("User could not be retrieved."))
                 .switchIfEmpty(Mono.error(new NotFoundException("User not found.")));
     }
 
     public Flux<UserResponse> getUsers() {
         return repository.findAll()
-                .map(mapper::modelToResponseDto)
-                .onErrorMap(err -> new UserServiceException("Users could not be retrieved."));
+                .map(mapper::modelToResponseDto);
     }
 
     public Flux<UserResponse> getManyUsersByIds(List<String> ids) {
         return repository.findAllByIdIn(ids)
-                .map(mapper::modelToResponseDto)
-                .onErrorMap(err -> new UserServiceException("Users could not be retrieved."));
+                .map(mapper::modelToResponseDto);
     }
 
     public Mono<UserResponse> getUserByUsername(String username) {
         return repository
                 .findByUsername(username)
                 .map(mapper::modelToResponseDto)
-                .onErrorMap(err -> new UserServiceException("User could not be retrieved."))
                 .switchIfEmpty(Mono.error(new NotFoundException("User not found.")));
     }
 
     public Flux<UserResponse> searchUsers(String searchTerm) {
         return repository
                 .findAllByUsernameContainingIgnoreCase(searchTerm)
-                .map(mapper::modelToResponseDto)
-                .onErrorMap(err -> new UserServiceException("User could not be retrieved."));
+                .map(mapper::modelToResponseDto);
     }
 
     public Mono<Void> updateUser(String userId, Mono<UserUpdateRequest> userRequest) {
@@ -100,8 +92,7 @@ public class UserService {
                 .zipWith(requestMono)
                 .map(tuple -> mapper.updateModelFromDto(tuple.getT1(), tuple.getT2()))
                 .flatMap(repository::save)
-                .then()
-                .onErrorMap(err -> new UserServiceException("User could not be updated."));
+                .then();
     }
 
     public Mono<Void> modifyUserRole(String userId, Mono<UserRoleUpdateRequest> userRoleUpdateRequest) {
@@ -115,7 +106,6 @@ public class UserService {
                     return tuple.getT1();
                 })
                 .flatMap(repository::save)
-                .then()
-                .onErrorMap(err -> new UserServiceException("User's role could not be updated."));
+                .then();
     }
 }

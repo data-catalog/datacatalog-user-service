@@ -5,6 +5,7 @@
  */
 package edu.bbte.projectbluebook.datacatalog.users.api;
 
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.ErrorResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserCreationRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserRoleUpdateRequest;
@@ -48,8 +49,9 @@ public interface UserApi {
     @ApiOperation(value = "Create a User", nickname = "createUser", notes = "Create new user (registration).", tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Created"),
-        @ApiResponse(code = 422, message = "Unprocessable entity.") })
+        @ApiResponse(code = 422, message = "Unprocessable entity.", response = ErrorResponse.class) })
     @RequestMapping(value = "/users",
+        produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
     default Mono<ResponseEntity<Void>> createUser(@ApiParam(value = "User information for registration."  )  @Valid @RequestBody(required = false) Mono<UserCreationRequest> userCreationRequest, ServerWebExchange exchange) {
@@ -203,16 +205,17 @@ public interface UserApi {
      *
      * @param userId The id of the user. (required)
      * @param userRoleUpdateRequest  (optional)
-     * @return No Content (status code 204)
-     *         or Not Found (status code 404)
+     * @return Not Found (status code 404)
+     *         or Unprocessable Entity (WebDAV) (status code 422)
      */
     @ApiOperation(value = "Modify User Role by ID", nickname = "modifyUserRole", notes = "Modifies the user's role.", authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 204, message = "No Content"),
-        @ApiResponse(code = 404, message = "Not Found") })
+        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (WebDAV)", response = ErrorResponse.class) })
     @RequestMapping(value = "/users/{userId}/role",
+        produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
     default Mono<ResponseEntity<Void>> modifyUserRole(@ApiParam(value = "The id of the user.",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserRoleUpdateRequest> userRoleUpdateRequest, ServerWebExchange exchange) {
@@ -259,14 +262,17 @@ public interface UserApi {
      * @param userUpdateRequest  (optional)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
+     *         or Unprocessable Entity (WebDAV) (status code 422)
      */
     @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.", authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 204, message = "No Content"),
-        @ApiResponse(code = 404, message = "Not Found") })
+        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (WebDAV)", response = ErrorResponse.class) })
     @RequestMapping(value = "/users/{userId}",
+        produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
     default Mono<ResponseEntity<Void>> updateUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserUpdateRequest> userUpdateRequest, ServerWebExchange exchange) {

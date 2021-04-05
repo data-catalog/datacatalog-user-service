@@ -1,6 +1,5 @@
 package edu.bbte.projectbluebook.datacatalog.users.service;
 
-import edu.bbte.projectbluebook.datacatalog.users.exception.AuthenticationServiceException;
 import edu.bbte.projectbluebook.datacatalog.users.model.User;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.TokenInfoRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.TokenInfoResponse;
@@ -49,7 +48,6 @@ public class AuthenticationService {
                         .findByUsername(request.getUsername())
                         .filter(user -> passwordEncoder.matches(request.getPassword(), user.getPassword())))
                 .map(user -> mapper.modelToLoginResponse(user, createToken(user)))
-                .onErrorMap(err -> new AuthenticationServiceException("Could not log in."))
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED)));
     }
 

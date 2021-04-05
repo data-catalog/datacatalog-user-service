@@ -5,6 +5,7 @@
  */
 package edu.bbte.projectbluebook.datacatalog.users.api;
 
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.ErrorResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.TokenInfoRequest;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.TokenInfoResponse;
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserLoginRequest;
@@ -44,11 +45,13 @@ public interface AuthenticationApi {
      * @param userLoginRequest  (optional)
      * @return OK (status code 200)
      *         or Authentication failed. The username or password is not correct. (status code 401)
+     *         or Unprocessable Entity (WebDAV) (status code 422)
      */
     @ApiOperation(value = "Log In", nickname = "login", notes = "Log user into the system.", response = UserLoginResponse.class, tags={ "Authentication","User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = UserLoginResponse.class),
-        @ApiResponse(code = 401, message = "Authentication failed. The username or password is not correct.") })
+        @ApiResponse(code = 401, message = "Authentication failed. The username or password is not correct."),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (WebDAV)", response = ErrorResponse.class) })
     @RequestMapping(value = "/users/login",
         produces = { "application/json" }, 
         consumes = { "application/json" },
