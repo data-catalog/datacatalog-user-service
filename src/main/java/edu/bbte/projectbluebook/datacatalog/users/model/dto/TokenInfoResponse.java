@@ -28,7 +28,7 @@ public class TokenInfoResponse  implements Serializable {
   private String username;
 
   /**
-   * the role for the user that the token was issued to. 
+   * The role of the user that the token was issued to. 
    */
   public enum RoleEnum {
     USER("USER"),
@@ -77,10 +77,10 @@ public class TokenInfoResponse  implements Serializable {
   }
 
   /**
-   * This is a boolean value of whether or not the presented token is currently active.
+   * This is a boolean value indicating if the token is currently active.
    * @return active
   */
-  @ApiModelProperty(value = "This is a boolean value of whether or not the presented token is currently active.")
+  @ApiModelProperty(value = "This is a boolean value indicating if the token is currently active.")
 
 
   public Boolean getActive() {
@@ -97,10 +97,10 @@ public class TokenInfoResponse  implements Serializable {
   }
 
   /**
-   * The unique identifier for the user that the token was issued to.
+   * The ID of the user that the token was issued to.
    * @return userId
   */
-  @ApiModelProperty(value = "The unique identifier for the user that the token was issued to.")
+  @ApiModelProperty(value = "The ID of the user that the token was issued to.")
 
 @Size(min=1) 
   public String getUserId() {
@@ -137,10 +137,10 @@ public class TokenInfoResponse  implements Serializable {
   }
 
   /**
-   * the role for the user that the token was issued to. 
+   * The role of the user that the token was issued to. 
    * @return role
   */
-  @ApiModelProperty(value = "the role for the user that the token was issued to. ")
+  @ApiModelProperty(value = "The role of the user that the token was issued to. ")
 
 
   public RoleEnum getRole() {

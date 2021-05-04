@@ -40,14 +40,14 @@ public interface AuthenticationApi {
 
     /**
      * POST /users/login : Log In
-     * Log user into the system.
+     * Log in with a username and password.
      *
      * @param userLoginRequest  (optional)
      * @return OK (status code 200)
      *         or Authentication failed. The username or password is not correct. (status code 401)
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Log In", nickname = "login", notes = "Log user into the system.", response = UserLoginResponse.class, tags={ "Authentication","User", })
+    @ApiOperation(value = "Log In", nickname = "login", notes = "Log in with a username and password.", response = UserLoginResponse.class, tags={ "Authentication", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = UserLoginResponse.class),
         @ApiResponse(code = 401, message = "Authentication failed. The username or password is not correct."),
@@ -61,7 +61,7 @@ public interface AuthenticationApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"user\" : { \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }, \"token\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODUxNDA5ODQsImlhdCI6MTQ4NTEzNzM4NCwiaXNzIjoiYWNtZS5jb20iLCJzdWIiOiIyOWFjMGMxOC0wYjRhLTQyY2YtODJmYy0wM2Q1NzAzMThhMWQiLCJhcHBsaWNhdGlvbklkIjoiNzkxMDM3MzQtOTdhYi00ZDFhLWFmMzctZTAwNmQwNWQyOTUyIiwic\" }";
+                String exampleString = "{ \"user\" : { \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"role\" : \"USER\", \"id\" : \"id\", \"email\" : \"email\", \"username\" : \"username\" }, \"token\" : \"token\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -73,19 +73,21 @@ public interface AuthenticationApi {
 
     /**
      * POST /token_info : Token Introspection
-     * It provides information about the token.
+     * It provides information about the token.  Primarily used by other services of the application, to confirm the token&#39;s authenticity.
      *
-     * @param tokenInfoRequest Contains the token. (optional)
+     * @param tokenInfoRequest  (optional)
      * @return OK (status code 200)
+     *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Token Introspection", nickname = "tokenInfo", notes = "It provides information about the token.", response = TokenInfoResponse.class, tags={ "Authentication","User", })
+    @ApiOperation(value = "Token Introspection", nickname = "tokenInfo", notes = "It provides information about the token.  Primarily used by other services of the application, to confirm the token's authenticity.", response = TokenInfoResponse.class, tags={ "Authentication", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = TokenInfoResponse.class) })
+        @ApiResponse(code = 200, message = "OK", response = TokenInfoResponse.class),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (WebDAV)") })
     @RequestMapping(value = "/token_info",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default Mono<ResponseEntity<TokenInfoResponse>> tokenInfo(@ApiParam(value = "Contains the token."  )  @Valid @RequestBody(required = false) Mono<TokenInfoRequest> tokenInfoRequest, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<TokenInfoResponse>> tokenInfo(@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<TokenInfoRequest> tokenInfoRequest, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {

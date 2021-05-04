@@ -35,10 +35,10 @@ public class UserUpdateRequest  implements Serializable {
   }
 
   /**
-   * Get email
+   * The new e-mail address.
    * @return email
   */
-  @ApiModelProperty(example = "example@mail.com", value = "")
+  @ApiModelProperty(example = "example@mail.com", value = "The new e-mail address.")
 
 @javax.validation.constraints.Email
   public String getEmail() {
@@ -55,10 +55,10 @@ public class UserUpdateRequest  implements Serializable {
   }
 
   /**
-   * Get firstName
+   * The new first name.
    * @return firstName
   */
-  @ApiModelProperty(example = "Jane", value = "")
+  @ApiModelProperty(example = "Jane", value = "The new first name.")
 
 
   public String getFirstName() {
@@ -75,10 +75,10 @@ public class UserUpdateRequest  implements Serializable {
   }
 
   /**
-   * Get lastName
+   * The new last name.
    * @return lastName
   */
-  @ApiModelProperty(example = "Doe", value = "")
+  @ApiModelProperty(example = "Doe", value = "The new last name.")
 
 
   public String getLastName() {

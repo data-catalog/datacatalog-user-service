@@ -11,9 +11,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ApiKey model sent by the client to the server for creating a new api key.
+ * 
  */
-@ApiModel(description = "ApiKey model sent by the client to the server for creating a new api key.")
+@ApiModel(description = "")
 
 public class ApiKeyCreationRequest  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -27,10 +27,10 @@ public class ApiKeyCreationRequest  implements Serializable {
   }
 
   /**
-   * A descriptive name for the new api key. Use a name that will help you recognize this key in your account.
+   * The name of the API key.
    * @return title
   */
-  @ApiModelProperty(required = true, value = "A descriptive name for the new api key. Use a name that will help you recognize this key in your account.")
+  @ApiModelProperty(required = true, value = "The name of the API key.")
   @NotNull
 
 @Size(min=1) 

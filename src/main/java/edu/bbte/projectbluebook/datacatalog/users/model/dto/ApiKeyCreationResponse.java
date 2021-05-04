@@ -11,9 +11,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ApiKey model sent by the server to the client after the generation of a new api key. Note that the actual key is only sent once after the creation of the key, and will only be stored a hashed version of it on the server. Make sure to save the key, as it is not recoverable.
+ * 
  */
-@ApiModel(description = "ApiKey model sent by the server to the client after the generation of a new api key. Note that the actual key is only sent once after the creation of the key, and will only be stored a hashed version of it on the server. Make sure to save the key, as it is not recoverable.")
+@ApiModel(description = "")
 
 public class ApiKeyCreationResponse  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -33,10 +33,10 @@ public class ApiKeyCreationResponse  implements Serializable {
   }
 
   /**
-   * A descriptive name for the new api key.
+   * A name of the API key.
    * @return title
   */
-  @ApiModelProperty(value = "A descriptive name for the new api key.")
+  @ApiModelProperty(value = "A name of the API key.")
 
 
   public String getTitle() {
@@ -53,10 +53,10 @@ public class ApiKeyCreationResponse  implements Serializable {
   }
 
   /**
-   * The unique identifier of the api key.
+   * The ID of the api key.
    * @return id
   */
-  @ApiModelProperty(value = "The unique identifier of the api key.")
+  @ApiModelProperty(value = "The ID of the api key.")
 
 
   public String getId() {

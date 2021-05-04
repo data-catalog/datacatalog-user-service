@@ -34,7 +34,7 @@ public class UserLoginResponse  implements Serializable {
    * JWT token sent by the server. The client will send this with every request to authenticate themselves.
    * @return token
   */
-  @ApiModelProperty(example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODUxNDA5ODQsImlhdCI6MTQ4NTEzNzM4NCwiaXNzIjoiYWNtZS5jb20iLCJzdWIiOiIyOWFjMGMxOC0wYjRhLTQyY2YtODJmYy0wM2Q1NzAzMThhMWQiLCJhcHBsaWNhdGlvbklkIjoiNzkxMDM3MzQtOTdhYi00ZDFhLWFmMzctZTAwNmQwNWQyOTUyIiwic", value = "JWT token sent by the server. The client will send this with every request to authenticate themselves.")
+  @ApiModelProperty(value = "JWT token sent by the server. The client will send this with every request to authenticate themselves.")
 
 
   public String getToken() {
