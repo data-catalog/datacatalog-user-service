@@ -34,7 +34,7 @@ public class UserResponse  implements Serializable {
   private String username;
 
   /**
-   * Gets or Sets role
+   * The role of the user.
    */
   public enum RoleEnum {
     ADMIN("ADMIN"),
@@ -77,10 +77,10 @@ public class UserResponse  implements Serializable {
   }
 
   /**
-   * Get id
+   * The ID of the user.
    * @return id
   */
-  @ApiModelProperty(example = "507f1f77bcf86cd799439011", value = "")
+  @ApiModelProperty(value = "The ID of the user.")
 
 
   public String getId() {
@@ -97,10 +97,10 @@ public class UserResponse  implements Serializable {
   }
 
   /**
-   * Get email
+   * The e-mail address of the user.
    * @return email
   */
-  @ApiModelProperty(example = "example@mail.com", value = "")
+  @ApiModelProperty(value = "The e-mail address of the user.")
 
 @javax.validation.constraints.Email
   public String getEmail() {
@@ -117,10 +117,10 @@ public class UserResponse  implements Serializable {
   }
 
   /**
-   * Get firstName
+   * The first name of the user.
    * @return firstName
   */
-  @ApiModelProperty(example = "Jane", value = "")
+  @ApiModelProperty(value = "The first name of the user.")
 
 
   public String getFirstName() {
@@ -137,10 +137,10 @@ public class UserResponse  implements Serializable {
   }
 
   /**
-   * Get lastName
+   * The last name of the user.
    * @return lastName
   */
-  @ApiModelProperty(example = "Doe", value = "")
+  @ApiModelProperty(value = "The last name of the user.")
 
 
   public String getLastName() {
@@ -157,10 +157,10 @@ public class UserResponse  implements Serializable {
   }
 
   /**
-   * Get username
+   * The username of the user.
    * @return username
   */
-  @ApiModelProperty(example = "User1", value = "")
+  @ApiModelProperty(value = "The username of the user.")
 
 @Size(min=3) 
   public String getUsername() {
@@ -177,10 +177,10 @@ public class UserResponse  implements Serializable {
   }
 
   /**
-   * Get role
+   * The role of the user.
    * @return role
   */
-  @ApiModelProperty(example = "user", value = "")
+  @ApiModelProperty(value = "The role of the user.")
 
 
   public RoleEnum getRole() {

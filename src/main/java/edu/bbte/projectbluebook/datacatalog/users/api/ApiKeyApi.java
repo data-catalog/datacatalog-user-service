@@ -38,15 +38,15 @@ public interface ApiKeyApi {
 
     /**
      * POST /user/keys : Create an API Key for the Authenticated User
-     * Generates a new api key for the authenticated user. Requires that you are authenticated via access token.
+     * Generates a new API key for the authenticated user.  Requires authentication.   The key will be returned only with this request. It cannot be viewed again.
      *
      * @param apiKeyCreationRequest  (optional)
      * @return Created (status code 201)
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Create an API Key for the Authenticated User", nickname = "createUserApiKey", notes = "Generates a new api key for the authenticated user. Requires that you are authenticated via access token.", response = ApiKeyCreationResponse.class, authorizations = {
+    @ApiOperation(value = "Create an API Key for the Authenticated User", nickname = "createUserApiKey", notes = "Generates a new API key for the authenticated user.  Requires authentication.   The key will be returned only with this request. It cannot be viewed again.", response = ApiKeyCreationResponse.class, authorizations = {
         @Authorization(value = "JWT")
-    }, tags={ "ApiKey","User", })
+    }, tags={ "ApiKey", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Created", response = ApiKeyCreationResponse.class),
         @ApiResponse(code = 422, message = "Unprocessable Entity (WebDAV)") })
@@ -71,21 +71,21 @@ public interface ApiKeyApi {
 
     /**
      * DELETE /user/keys/{keyId} : Delete an API Key
-     * Removes an api key from the authenticated user. Requires that you are authenticated via access token.
+     * Removes an API key from the authenticated user.
      *
-     * @param keyId The id of the api key. (required)
+     * @param keyId The ID of the API key. (required)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
      */
-    @ApiOperation(value = "Delete an API Key", nickname = "deleteUserApiKey", notes = "Removes an api key from the authenticated user. Requires that you are authenticated via access token.", authorizations = {
+    @ApiOperation(value = "Delete an API Key", nickname = "deleteUserApiKey", notes = "Removes an API key from the authenticated user.", authorizations = {
         @Authorization(value = "JWT")
-    }, tags={ "ApiKey","User", })
+    }, tags={ "ApiKey", })
     @ApiResponses(value = { 
         @ApiResponse(code = 204, message = "No Content"),
         @ApiResponse(code = 404, message = "Not Found") })
     @RequestMapping(value = "/user/keys/{keyId}",
         method = RequestMethod.DELETE)
-    default Mono<ResponseEntity<Void>> deleteUserApiKey(@ApiParam(value = "The id of the api key.",required=true) @PathVariable("keyId") String keyId, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<Void>> deleteUserApiKey(@ApiParam(value = "The ID of the API key.",required=true) @PathVariable("keyId") String keyId, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());
@@ -95,27 +95,27 @@ public interface ApiKeyApi {
 
     /**
      * GET /user/keys/{keyId} : Get an API Key
-     * View a single api key of the authenticated user. Requires that you are authenticated via access token.
+     * View a single API key of the authenticated user. For security reasons, it only returns the name and ID, not the key itself.
      *
-     * @param keyId The id of the api key. (required)
+     * @param keyId The ID of the API key. (required)
      * @return OK (status code 200)
      *         or Not Found (status code 404)
      */
-    @ApiOperation(value = "Get an API Key", nickname = "getUserApiKey", notes = "View a single api key of the authenticated user. Requires that you are authenticated via access token.", response = ApiKeyResponse.class, authorizations = {
+    @ApiOperation(value = "Get an API Key", nickname = "getUserApiKey", notes = "View a single API key of the authenticated user. For security reasons, it only returns the name and ID, not the key itself.", response = ApiKeyResponse.class, authorizations = {
         @Authorization(value = "JWT")
-    }, tags={ "ApiKey","User", })
+    }, tags={ "ApiKey", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = ApiKeyResponse.class),
         @ApiResponse(code = 404, message = "Not Found") })
     @RequestMapping(value = "/user/keys/{keyId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default Mono<ResponseEntity<ApiKeyResponse>> getUserApiKey(@ApiParam(value = "The id of the api key.",required=true) @PathVariable("keyId") String keyId, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<ApiKeyResponse>> getUserApiKey(@ApiParam(value = "The ID of the API key.",required=true) @PathVariable("keyId") String keyId, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"title\" : \"title\" }";
+                String exampleString = "{ \"id\" : \"id\", \"title\" : \"title\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -127,13 +127,13 @@ public interface ApiKeyApi {
 
     /**
      * GET /user/keys : Get the API Keys of the Authenticated User
-     * Lists the api keys for the authenticated user. Requires authentication via access token.
+     * Lists the API keys for the authenticated user. For security reasons, it only returns the name and ID, not the key itself.  Requires authentication.
      *
      * @return OK (status code 200)
      */
-    @ApiOperation(value = "Get the API Keys of the Authenticated User", nickname = "getUserApiKeys", notes = "Lists the api keys for the authenticated user. Requires authentication via access token.", response = ApiKeyResponse.class, responseContainer = "List", authorizations = {
+    @ApiOperation(value = "Get the API Keys of the Authenticated User", nickname = "getUserApiKeys", notes = "Lists the API keys for the authenticated user. For security reasons, it only returns the name and ID, not the key itself.  Requires authentication.", response = ApiKeyResponse.class, responseContainer = "List", authorizations = {
         @Authorization(value = "JWT")
-    }, tags={ "ApiKey","User", })
+    }, tags={ "ApiKey", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = ApiKeyResponse.class, responseContainer = "List") })
     @RequestMapping(value = "/user/keys",
@@ -144,7 +144,7 @@ public interface ApiKeyApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"title\" : \"title\" }";
+                String exampleString = "{ \"id\" : \"id\", \"title\" : \"title\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }

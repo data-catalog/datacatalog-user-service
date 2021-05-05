@@ -64,19 +64,21 @@ public interface UserApi {
 
     /**
      * DELETE /users/{userId} : Delete a User
-     * Delete a specific user
+     * Delete the user which ID corresponds to the ID provided.  Requires authentication and *ADMIN* rights to perform the deletion.  A response with status code of &#x60;204&#x60; with empty resonse body indicates that the deletion was successful.
      *
-     * @param userId Unique identifier for user (required)
+     * @param userId The ID of the user. (required)
      * @return User deleted (status code 204)
+     *         or Not Found (status code 404)
      */
-    @ApiOperation(value = "Delete a User", nickname = "deleteUser", notes = "Delete a specific user", authorizations = {
+    @ApiOperation(value = "Delete a User", nickname = "deleteUser", notes = "Delete the user which ID corresponds to the ID provided.  Requires authentication and *ADMIN* rights to perform the deletion.  A response with status code of `204` with empty resonse body indicates that the deletion was successful.", authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 204, message = "User deleted") })
+        @ApiResponse(code = 204, message = "User deleted"),
+        @ApiResponse(code = 404, message = "Not Found") })
     @RequestMapping(value = "/users/{userId}",
         method = RequestMethod.DELETE)
-    default Mono<ResponseEntity<Void>> deleteUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<Void>> deleteUser(@ApiParam(value = "The ID of the user.",required=true) @PathVariable("userId") String userId, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());
@@ -88,7 +90,7 @@ public interface UserApi {
      * GET /users/show_many : Get Many Users by ID
      * Returns all of the users with the specified IDs.
      *
-     * @param ids A comma separated list of ids to query. (required)
+     * @param ids A comma separated list of IDs to query. (required)
      * @return OK (status code 200)
      */
     @ApiOperation(value = "Get Many Users by ID", nickname = "getManyUsersById", notes = "Returns all of the users with the specified IDs.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
@@ -97,12 +99,12 @@ public interface UserApi {
     @RequestMapping(value = "/users/show_many",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default Mono<ResponseEntity<Flux<UserResponse>>> getManyUsersById(@NotNull @ApiParam(value = "A comma separated list of ids to query.", required = true) @Valid @RequestParam(value = "ids", required = true) List<String> ids, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<Flux<UserResponse>>> getManyUsersById(@NotNull @ApiParam(value = "A comma separated list of IDs to query.", required = true) @Valid @RequestParam(value = "ids", required = true) List<String> ids, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"role\" : \"USER\", \"id\" : \"id\", \"email\" : \"email\", \"username\" : \"username\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -114,25 +116,25 @@ public interface UserApi {
 
     /**
      * GET /users/{userId} : Get a User
-     * Get user by ID
+     * Returns the user which ID corresponds to the ID provided.
      *
-     * @param userId Unique identifier for user (required)
+     * @param userId The ID of the user. (required)
      * @return OK (status code 200)
-     *         or User not found (status code 404)
+     *         or Not Found (status code 404)
      */
-    @ApiOperation(value = "Get a User", nickname = "getUser", notes = "Get user by ID", response = UserResponse.class, tags={ "User", })
+    @ApiOperation(value = "Get a User", nickname = "getUser", notes = "Returns the user which ID corresponds to the ID provided.", response = UserResponse.class, tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = UserResponse.class),
-        @ApiResponse(code = 404, message = "User not found") })
+        @ApiResponse(code = 404, message = "Not Found") })
     @RequestMapping(value = "/users/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default Mono<ResponseEntity<UserResponse>> getUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<UserResponse>> getUser(@ApiParam(value = "The ID of the user.",required=true) @PathVariable("userId") String userId, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"role\" : \"USER\", \"id\" : \"id\", \"email\" : \"email\", \"username\" : \"username\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -162,7 +164,7 @@ public interface UserApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"role\" : \"USER\", \"id\" : \"id\", \"email\" : \"email\", \"username\" : \"username\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -174,11 +176,11 @@ public interface UserApi {
 
     /**
      * GET /users : Get all Users
-     * Get all users.
+     * Lists all the users.
      *
      * @return OK (status code 200)
      */
-    @ApiOperation(value = "Get all Users", nickname = "getUsers", notes = "Get all users.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
+    @ApiOperation(value = "Get all Users", nickname = "getUsers", notes = "Lists all the users.", response = UserResponse.class, responseContainer = "List", tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK", response = UserResponse.class, responseContainer = "List") })
     @RequestMapping(value = "/users",
@@ -189,7 +191,7 @@ public interface UserApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"role\" : \"USER\", \"id\" : \"id\", \"email\" : \"email\", \"username\" : \"username\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -201,24 +203,26 @@ public interface UserApi {
 
     /**
      * PUT /users/{userId}/role : Modify User Role by ID
-     * Modifies the user&#39;s role.
+     * Modifies the user&#39;s role.  Requires authentication and *ADMIN* rights.
      *
-     * @param userId The id of the user. (required)
+     * @param userId The ID of the user. (required)
      * @param userRoleUpdateRequest  (optional)
-     * @return Not Found (status code 404)
+     * @return No Content (status code 204)
+     *         or Not Found (status code 404)
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Modify User Role by ID", nickname = "modifyUserRole", notes = "Modifies the user's role.", authorizations = {
+    @ApiOperation(value = "Modify User Role by ID", nickname = "modifyUserRole", notes = "Modifies the user's role.  Requires authentication and *ADMIN* rights.", authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "No Content"),
         @ApiResponse(code = 404, message = "Not Found"),
         @ApiResponse(code = 422, message = "Unprocessable Entity (WebDAV)", response = ErrorResponse.class) })
     @RequestMapping(value = "/users/{userId}/role",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    default Mono<ResponseEntity<Void>> modifyUserRole(@ApiParam(value = "The id of the user.",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserRoleUpdateRequest> userRoleUpdateRequest, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<Void>> modifyUserRole(@ApiParam(value = "The ID of the user.",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserRoleUpdateRequest> userRoleUpdateRequest, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());
@@ -244,7 +248,7 @@ public interface UserApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"firstName\" : \"Jane\", \"lastName\" : \"Doe\", \"role\" : \"user\", \"id\" : \"507f1f77bcf86cd799439011\", \"email\" : \"example@mail.com\", \"username\" : \"User1\" }";
+                String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"role\" : \"USER\", \"id\" : \"id\", \"email\" : \"email\", \"username\" : \"username\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -256,15 +260,15 @@ public interface UserApi {
 
     /**
      * PATCH /users/{userId} : Update User by ID
-     * Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.
+     * Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - &#x60;204&#x60;: The update was successful.  - &#x60;404&#x60;: There is no user found with the provided ID.  - &#x60;422&#x60;: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.
      *
-     * @param userId Unique identifier for user (required)
+     * @param userId The ID of the user. (required)
      * @param userUpdateRequest  (optional)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Updates the specified attributes of a user. The attributes not present in the request remain unchanged. The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.", authorizations = {
+    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - `204`: The update was successful.  - `404`: There is no user found with the provided ID.  - `422`: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.", authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
@@ -275,7 +279,7 @@ public interface UserApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PATCH)
-    default Mono<ResponseEntity<Void>> updateUser(@ApiParam(value = "Unique identifier for user",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserUpdateRequest> userUpdateRequest, ServerWebExchange exchange) {
+    default Mono<ResponseEntity<Void>> updateUser(@ApiParam(value = "The ID of the user.",required=true) @PathVariable("userId") String userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) Mono<UserUpdateRequest> userUpdateRequest, ServerWebExchange exchange) {
         Mono<Void> result = Mono.empty();
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         return result.then(Mono.empty());

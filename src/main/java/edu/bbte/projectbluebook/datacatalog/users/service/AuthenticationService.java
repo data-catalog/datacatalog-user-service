@@ -1,16 +1,10 @@
 package edu.bbte.projectbluebook.datacatalog.users.service;
 
 import edu.bbte.projectbluebook.datacatalog.users.model.User;
-import edu.bbte.projectbluebook.datacatalog.users.model.dto.TokenInfoRequest;
-import edu.bbte.projectbluebook.datacatalog.users.model.dto.TokenInfoResponse;
-import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserLoginRequest;
-import edu.bbte.projectbluebook.datacatalog.users.model.dto.UserLoginResponse;
+import edu.bbte.projectbluebook.datacatalog.users.model.dto.*;
 import edu.bbte.projectbluebook.datacatalog.users.model.mapper.UserMapper;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +24,9 @@ public class AuthenticationService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserMapper mapper;
@@ -70,16 +67,33 @@ public class AuthenticationService {
                 .compact();
     }
 
+    private TokenInfoResponse claimsToTokenInfoResponse(Claims claims) {
+        return new TokenInfoResponse()
+                .active(true)
+                .exp(claims.getExpiration().getTime())
+                .iat(claims.getIssuedAt().getTime())
+                .userId(claims.get("userId", String.class))
+                .username(claims.getSubject())
+                .role(TokenInfoResponse.RoleEnum.fromValue(claims.get("role", String.class)));
+    }
+
+    private TokenInfoResponse userResponseToTokenInfoResponse(UserResponse user) {
+        return new TokenInfoResponse()
+                .active(true)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .role(TokenInfoResponse.RoleEnum.fromValue(user.getRole().getValue()));
+    }
+
     public Mono<TokenInfoResponse> decodeToken(Mono<TokenInfoRequest> tokenInfoRequest) {
         return tokenInfoRequest
-                .map(request -> jwtParser.parseClaimsJws(request.getToken()).getBody())
-                .map(claims -> new TokenInfoResponse()
-                        .active(true)
-                        .exp(claims.getExpiration().getTime())
-                        .iat(claims.getIssuedAt().getTime())
-                        .userId(claims.get("userId", String.class))
-                        .username(claims.getSubject())
-                        .role(TokenInfoResponse.RoleEnum.fromValue(claims.get("role", String.class))))
+                .flatMap(request -> Mono.fromCallable(() -> jwtParser.parseClaimsJws(request.getToken()).getBody())
+                            .map(this::claimsToTokenInfoResponse)
+                            .onErrorResume((err) -> userService
+                                    .getUserWithApiKey(request.getToken())
+                                    .map(this::userResponseToTokenInfoResponse)
+                                    .doOnError(Throwable::printStackTrace)
+                                    .doOnNext(System.out::println)))
                 .onErrorReturn(new TokenInfoResponse().active(false));
     }
 }

@@ -65,10 +65,10 @@ public class TokenInfoRequest  implements Serializable {
   }
 
   /**
-   * The string value of the token. 
+   * The string value of the token.
    * @return token
   */
-  @ApiModelProperty(required = true, value = "The string value of the token. ")
+  @ApiModelProperty(required = true, value = "The string value of the token.")
   @NotNull
 
 

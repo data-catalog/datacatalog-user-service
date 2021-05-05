@@ -5,16 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ApiKey model sent by the server to the client. Note that the actual key is only sent once after the creation of the key, and will only be stored a hased version of it on the server. Make sure to save the key, as it is not recoverable.
+ * 
  */
-@ApiModel(description = "ApiKey model sent by the server to the client. Note that the actual key is only sent once after the creation of the key, and will only be stored a hased version of it on the server. Make sure to save the key, as it is not recoverable.")
+@ApiModel(description = "")
 
 public class ApiKeyResponse  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -23,7 +22,7 @@ public class ApiKeyResponse  implements Serializable {
   private String title;
 
   @JsonProperty("id")
-  private UUID id;
+  private String id;
 
   public ApiKeyResponse title(String title) {
     this.title = title;
@@ -31,10 +30,10 @@ public class ApiKeyResponse  implements Serializable {
   }
 
   /**
-   * 
+   * The name of the API key.
    * @return title
   */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The name of the API key.")
 
 
   public String getTitle() {
@@ -45,24 +44,23 @@ public class ApiKeyResponse  implements Serializable {
     this.title = title;
   }
 
-  public ApiKeyResponse id(UUID id) {
+  public ApiKeyResponse id(String id) {
     this.id = id;
     return this;
   }
 
   /**
-   * The unique identifier of the api key.
+   * The ID of the api key.
    * @return id
   */
-  @ApiModelProperty(value = "The unique identifier of the api key.")
+  @ApiModelProperty(value = "The ID of the api key.")
 
-  @Valid
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 

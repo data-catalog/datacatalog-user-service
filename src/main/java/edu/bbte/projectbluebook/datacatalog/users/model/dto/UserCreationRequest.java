@@ -38,10 +38,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * Get email
+   * The e-mail address of the user. Another user with this email must not exist in the application.
    * @return email
   */
-  @ApiModelProperty(example = "example@mail.com", required = true, value = "")
+  @ApiModelProperty(required = true, value = "The e-mail address of the user. Another user with this email must not exist in the application.")
   @NotNull
 
 @javax.validation.constraints.Email
@@ -59,10 +59,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * Get firstName
+   * The first name of the user.
    * @return firstName
   */
-  @ApiModelProperty(example = "Jane", required = true, value = "")
+  @ApiModelProperty(required = true, value = "The first name of the user.")
   @NotNull
 
 
@@ -80,10 +80,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * Get lastName
+   * The last name of the user.
    * @return lastName
   */
-  @ApiModelProperty(example = "Doe", required = true, value = "")
+  @ApiModelProperty(required = true, value = "The last name of the user.")
   @NotNull
 
 
@@ -101,10 +101,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * Get username
+   * The username of the user. This will appear to other users.
    * @return username
   */
-  @ApiModelProperty(example = "User1", required = true, value = "")
+  @ApiModelProperty(required = true, value = "The username of the user. This will appear to other users.")
   @NotNull
 
 @Size(min=3) 
@@ -122,10 +122,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * Password of minimum 6 characters, which contains at least a number and a letter
+   * Password of minimum 6 characters, which contains at least a number and a letter.
    * @return password
   */
-  @ApiModelProperty(example = "password1234", required = true, value = "Password of minimum 6 characters, which contains at least a number and a letter")
+  @ApiModelProperty(example = "password1234", required = true, value = "Password of minimum 6 characters, which contains at least a number and a letter.")
   @NotNull
 
 @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$") @Size(min=6) 

@@ -29,10 +29,10 @@ public class UserLoginRequest  implements Serializable {
   }
 
   /**
-   * Get username
+   * The username of the user.
    * @return username
   */
-  @ApiModelProperty(example = "username1", required = true, value = "")
+  @ApiModelProperty(required = true, value = "The username of the user.")
   @NotNull
 
 
@@ -50,10 +50,10 @@ public class UserLoginRequest  implements Serializable {
   }
 
   /**
-   * Get password
+   * The password of the user.
    * @return password
   */
-  @ApiModelProperty(example = "password123", required = true, value = "")
+  @ApiModelProperty(required = true, value = "The password of the user.")
   @NotNull
 
 
