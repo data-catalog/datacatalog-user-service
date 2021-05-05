@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public abstract class ApiKeyMapper {
     public abstract ApiKey requestDtoToModel(ApiKeyCreationRequest apiKeyCreationRequest);
+
     public abstract ApiKeyCreationResponse modelToCreationResponseDto(ApiKey apiKey);
 
     public abstract  ApiKeyResponse modelToResponseDto(ApiKey apiKey);

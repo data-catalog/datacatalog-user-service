@@ -108,4 +108,11 @@ public class UserService {
                 .flatMap(repository::save)
                 .then();
     }
+
+    public Mono<UserResponse> getUserWithApiKey(String key) {
+        return repository
+                .findByApiKey(key)
+                .switchIfEmpty(Mono.error(new NotFoundException("User with this API key not found.")))
+                .map(user -> mapper.modelToResponseDto(user));
+    }
 }
