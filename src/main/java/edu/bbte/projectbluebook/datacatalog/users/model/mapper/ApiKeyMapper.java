@@ -6,7 +6,9 @@ import edu.bbte.projectbluebook.datacatalog.users.model.dto.ApiKeyCreationRespon
 import edu.bbte.projectbluebook.datacatalog.users.model.dto.ApiKeyResponse;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+import java.time.OffsetDateTime;
+
+@Mapper(componentModel = "spring", imports = {OffsetDateTime.class})
 public abstract class ApiKeyMapper {
     public abstract ApiKey requestDtoToModel(ApiKeyCreationRequest apiKeyCreationRequest);
 

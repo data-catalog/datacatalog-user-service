@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import javax.validation.Valid;
@@ -23,6 +24,10 @@ public class ApiKeyResponse  implements Serializable {
 
   @JsonProperty("id")
   private String id;
+
+  @JsonProperty("createdAt")
+  @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime createdAt;
 
   public ApiKeyResponse title(String title) {
     this.title = title;
@@ -64,6 +69,27 @@ public class ApiKeyResponse  implements Serializable {
     this.id = id;
   }
 
+  public ApiKeyResponse createdAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * The date of creation.
+   * @return createdAt
+  */
+  @ApiModelProperty(value = "The date of creation.")
+
+  @Valid
+
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -75,12 +101,13 @@ public class ApiKeyResponse  implements Serializable {
     }
     ApiKeyResponse apiKeyResponse = (ApiKeyResponse) o;
     return Objects.equals(this.title, apiKeyResponse.title) &&
-        Objects.equals(this.id, apiKeyResponse.id);
+        Objects.equals(this.id, apiKeyResponse.id) &&
+        Objects.equals(this.createdAt, apiKeyResponse.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, id);
+    return Objects.hash(title, id, createdAt);
   }
 
   @Override
@@ -90,6 +117,7 @@ public class ApiKeyResponse  implements Serializable {
     
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -11,8 +11,8 @@ import edu.bbte.projectbluebook.datacatalog.users.repository.UserRepository;
 import org.bson.internal.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.crypto.keygen.KeyGenerators;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
@@ -30,15 +30,12 @@ public class ApiKeyService {
     @Autowired
     private ApiKeyMapper mapper;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     public Mono<ApiKeyCreationResponse> createApiKey(String userId, Mono<ApiKeyCreationRequest> apiKeyCreationRequest) {
         String key = Base64.encode(KeyGenerators.secureRandom(64).generateKey());
 
         Mono<ApiKey> apiKeyMono = apiKeyCreationRequest
                 .map(request -> mapper.requestDtoToModel(request))
-                .map(apiKey -> apiKey.setKey(passwordEncoder.encode(key)));
+                .map(apiKey -> apiKey.setKey(Sha512DigestUtils.shaHex(key)));
 
         return repository
                 .findById(userId)
@@ -54,7 +51,8 @@ public class ApiKeyService {
                     return Mono.zip(saveMono, Mono.just(tuple.getT2()));
                 })
                 .map(Tuple2::getT2)
-                .map(apiKey -> mapper.modelToCreationResponseDto(apiKey));
+                .map(apiKey -> mapper.modelToCreationResponseDto(apiKey))
+                .map(response -> response.key(key));
     }
 
     public Mono<Void> deleteApiKey(String userId, String keyId) {

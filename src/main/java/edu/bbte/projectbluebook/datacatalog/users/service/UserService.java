@@ -10,17 +10,13 @@ import edu.bbte.projectbluebook.datacatalog.users.model.mapper.UserMapper;
 import edu.bbte.projectbluebook.datacatalog.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.codec.Hex;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.List;
 
 @Service
@@ -116,7 +112,7 @@ public class UserService {
 
     public Mono<UserResponse> getUserWithApiKey(String key) {
         return repository
-                .findByApiKey(passwordEncoder.encode(key))
+                .findByApiKey(Sha512DigestUtils.shaHex(key))
                 .switchIfEmpty(Mono.error(new NotFoundException("User with this API key not found.")))
                 .map(user -> mapper.modelToResponseDto(user));
     }

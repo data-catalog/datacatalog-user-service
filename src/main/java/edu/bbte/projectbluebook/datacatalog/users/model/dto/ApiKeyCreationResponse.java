@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import javax.validation.Valid;
@@ -27,16 +28,20 @@ public class ApiKeyCreationResponse  implements Serializable {
   @JsonProperty("key")
   private String key;
 
+  @JsonProperty("createdAt")
+  @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime createdAt;
+
   public ApiKeyCreationResponse title(String title) {
     this.title = title;
     return this;
   }
 
   /**
-   * A name of the API key.
+   * A name for the API key. Should be unique for the user.
    * @return title
   */
-  @ApiModelProperty(value = "A name of the API key.")
+  @ApiModelProperty(value = "A name for the API key. Should be unique for the user.")
 
 
   public String getTitle() {
@@ -87,6 +92,27 @@ public class ApiKeyCreationResponse  implements Serializable {
     this.key = key;
   }
 
+  public ApiKeyCreationResponse createdAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * The date of creation.
+   * @return createdAt
+  */
+  @ApiModelProperty(value = "The date of creation.")
+
+  @Valid
+
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -99,12 +125,13 @@ public class ApiKeyCreationResponse  implements Serializable {
     ApiKeyCreationResponse apiKeyCreationResponse = (ApiKeyCreationResponse) o;
     return Objects.equals(this.title, apiKeyCreationResponse.title) &&
         Objects.equals(this.id, apiKeyCreationResponse.id) &&
-        Objects.equals(this.key, apiKeyCreationResponse.key);
+        Objects.equals(this.key, apiKeyCreationResponse.key) &&
+        Objects.equals(this.createdAt, apiKeyCreationResponse.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, id, key);
+    return Objects.hash(title, id, key, createdAt);
   }
 
   @Override
@@ -115,6 +142,7 @@ public class ApiKeyCreationResponse  implements Serializable {
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    key: ").append(toIndentedString(key)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.OffsetDateTime;
+
 @Data
 @Accessors(chain = true)
 @Document
@@ -14,4 +16,6 @@ public class ApiKey {
     private String title;
 
     private String key;
+
+    private OffsetDateTime createdAt;
 }

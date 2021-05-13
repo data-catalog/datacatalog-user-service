@@ -59,7 +59,7 @@ public interface ApiKeyApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"id\" : \"id\", \"title\" : \"title\", \"key\" : \"key\" }";
+                String exampleString = "{ \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"id\" : \"id\", \"title\" : \"title\", \"key\" : \"key\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -78,6 +78,7 @@ public interface ApiKeyApi {
      *         or Not Found (status code 404)
      */
     @ApiOperation(value = "Delete an API Key", nickname = "deleteUserApiKey", notes = "Removes an API key from the authenticated user.", authorizations = {
+        @Authorization(value = "ApiKey"),
         @Authorization(value = "JWT")
     }, tags={ "ApiKey", })
     @ApiResponses(value = { 
@@ -102,6 +103,7 @@ public interface ApiKeyApi {
      *         or Not Found (status code 404)
      */
     @ApiOperation(value = "Get an API Key", nickname = "getUserApiKey", notes = "View a single API key of the authenticated user. For security reasons, it only returns the name and ID, not the key itself.", response = ApiKeyResponse.class, authorizations = {
+        @Authorization(value = "ApiKey"),
         @Authorization(value = "JWT")
     }, tags={ "ApiKey", })
     @ApiResponses(value = { 
@@ -115,7 +117,7 @@ public interface ApiKeyApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"id\" : \"id\", \"title\" : \"title\" }";
+                String exampleString = "{ \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"id\" : \"id\", \"title\" : \"title\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }
@@ -144,7 +146,7 @@ public interface ApiKeyApi {
         exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
         for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
             if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"id\" : \"id\", \"title\" : \"title\" }";
+                String exampleString = "{ \"createdAt\" : \"2000-01-23T04:56:07.000+00:00\", \"id\" : \"id\", \"title\" : \"title\" }";
                 result = ApiUtil.getExampleResponse(exchange, exampleString);
                 break;
             }

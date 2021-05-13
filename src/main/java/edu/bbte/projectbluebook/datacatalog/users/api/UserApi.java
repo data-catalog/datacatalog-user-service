@@ -71,6 +71,7 @@ public interface UserApi {
      *         or Not Found (status code 404)
      */
     @ApiOperation(value = "Delete a User", nickname = "deleteUser", notes = "Delete the user which ID corresponds to the ID provided.  Requires authentication and *ADMIN* rights to perform the deletion.  A response with status code of `204` with empty resonse body indicates that the deletion was successful.", authorizations = {
+        @Authorization(value = "ApiKey"),
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
@@ -212,6 +213,7 @@ public interface UserApi {
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
     @ApiOperation(value = "Modify User Role by ID", nickname = "modifyUserRole", notes = "Modifies the user's role.  Requires authentication and *ADMIN* rights.", authorizations = {
+        @Authorization(value = "ApiKey"),
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
@@ -269,6 +271,7 @@ public interface UserApi {
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
     @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - `204`: The update was successful.  - `404`: There is no user found with the provided ID.  - `422`: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.", authorizations = {
+        @Authorization(value = "ApiKey"),
         @Authorization(value = "JWT")
     }, tags={ "User", })
     @ApiResponses(value = { 
