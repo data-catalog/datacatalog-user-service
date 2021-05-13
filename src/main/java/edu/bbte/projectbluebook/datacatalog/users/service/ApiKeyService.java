@@ -12,6 +12,7 @@ import org.bson.internal.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
@@ -27,14 +28,17 @@ public class ApiKeyService {
     private UserRepository repository;
 
     @Autowired
-    ApiKeyMapper mapper;
+    private ApiKeyMapper mapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Mono<ApiKeyCreationResponse> createApiKey(String userId, Mono<ApiKeyCreationRequest> apiKeyCreationRequest) {
         String key = Base64.encode(KeyGenerators.secureRandom(64).generateKey());
 
         Mono<ApiKey> apiKeyMono = apiKeyCreationRequest
                 .map(request -> mapper.requestDtoToModel(request))
-                .map(apiKey -> apiKey.setKey(key));
+                .map(apiKey -> apiKey.setKey(passwordEncoder.encode(key)));
 
         return repository
                 .findById(userId)

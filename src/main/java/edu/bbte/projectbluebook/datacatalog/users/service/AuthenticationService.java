@@ -92,8 +92,8 @@ public class AuthenticationService {
                             .onErrorResume((err) -> userService
                                     .getUserWithApiKey(request.getToken())
                                     .map(this::userResponseToTokenInfoResponse)
-                                    .doOnError(Throwable::printStackTrace)
-                                    .doOnNext(System.out::println)))
+                            )
+                )
                 .onErrorReturn(new TokenInfoResponse().active(false));
     }
 }
