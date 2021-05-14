@@ -38,13 +38,13 @@ public interface ApiKeyApi {
 
     /**
      * POST /user/keys : Create an API Key for the Authenticated User
-     * Generates a new API key for the authenticated user.  Requires authentication.   The key will be returned only with this request. It cannot be viewed again.
+     * Generates a new API key for the authenticated user.  Requires authentication.  The key title must be unique for the user.   The key will be returned only with this request. It cannot be viewed again.
      *
      * @param apiKeyCreationRequest  (optional)
      * @return Created (status code 201)
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Create an API Key for the Authenticated User", nickname = "createUserApiKey", notes = "Generates a new API key for the authenticated user.  Requires authentication.   The key will be returned only with this request. It cannot be viewed again.", response = ApiKeyCreationResponse.class, authorizations = {
+    @ApiOperation(value = "Create an API Key for the Authenticated User", nickname = "createUserApiKey", notes = "Generates a new API key for the authenticated user.  Requires authentication.  The key title must be unique for the user.   The key will be returned only with this request. It cannot be viewed again.", response = ApiKeyCreationResponse.class, authorizations = {
         @Authorization(value = "JWT")
     }, tags={ "ApiKey", })
     @ApiResponses(value = { 

@@ -35,10 +35,10 @@ public class UserUpdateRequest  implements Serializable {
   }
 
   /**
-   * The new e-mail address.
+   * The new e-mail address. Must be unique in the application.
    * @return email
   */
-  @ApiModelProperty(example = "example@mail.com", value = "The new e-mail address.")
+  @ApiModelProperty(example = "example@mail.com", value = "The new e-mail address. Must be unique in the application.")
 
 @javax.validation.constraints.Email
   public String getEmail() {

@@ -40,13 +40,13 @@ public interface UserApi {
 
     /**
      * POST /users : Create a User
-     * Create new user (registration).
+     * Create new user (registration).  The e-mail address and username must be unique in the application.
      *
      * @param userCreationRequest User information for registration. (optional)
      * @return Created (status code 201)
      *         or Unprocessable entity. (status code 422)
      */
-    @ApiOperation(value = "Create a User", nickname = "createUser", notes = "Create new user (registration).", tags={ "User", })
+    @ApiOperation(value = "Create a User", nickname = "createUser", notes = "Create new user (registration).  The e-mail address and username must be unique in the application.", tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Created"),
         @ApiResponse(code = 422, message = "Unprocessable entity.", response = ErrorResponse.class) })
@@ -262,7 +262,7 @@ public interface UserApi {
 
     /**
      * PATCH /users/{userId} : Update User by ID
-     * Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - &#x60;204&#x60;: The update was successful.  - &#x60;404&#x60;: There is no user found with the provided ID.  - &#x60;422&#x60;: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.
+     * Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The e-mail address must be unique in the application.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - &#x60;204&#x60;: The update was successful.  - &#x60;404&#x60;: There is no user found with the provided ID.  - &#x60;422&#x60;: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.
      *
      * @param userId The ID of the user. (required)
      * @param userUpdateRequest  (optional)
@@ -270,7 +270,7 @@ public interface UserApi {
      *         or Not Found (status code 404)
      *         or Unprocessable Entity (WebDAV) (status code 422)
      */
-    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - `204`: The update was successful.  - `404`: There is no user found with the provided ID.  - `422`: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.", authorizations = {
+    @ApiOperation(value = "Update User by ID", nickname = "updateUser", notes = "Update the user which ID corresponds to the ID provided.  Only the attributes specified in the HTTP body will be modified. The attributes which are not specified will **not** change.  The e-mail address must be unique in the application.  The role of the user CANNOT be updated using this endpoint. The username CANNOT be updated at all.  Possible response codes:  - `204`: The update was successful.  - `404`: There is no user found with the provided ID.  - `422`: The object provided in the request body is malformed. A detailed explanation can be found in the response body. The user will not be updated.", authorizations = {
         @Authorization(value = "ApiKey"),
         @Authorization(value = "JWT")
     }, tags={ "User", })

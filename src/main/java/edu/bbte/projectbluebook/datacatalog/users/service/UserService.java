@@ -93,6 +93,9 @@ public class UserService {
                 .zipWith(requestMono)
                 .map(tuple -> mapper.updateModelFromDto(tuple.getT1(), tuple.getT2()))
                 .flatMap(repository::save)
+                .onErrorMap(DuplicateKeyException.class, err ->
+                        new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                                "Username or e-mail address is already used."))
                 .then();
     }
 

@@ -11,8 +11,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * UserCreationRequest
+ * 
  */
+@ApiModel(description = "")
 
 public class UserCreationRequest  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -38,10 +39,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * The e-mail address of the user. Another user with this email must not exist in the application.
+   * The e-mail address of the user. Must be unique in the application.
    * @return email
   */
-  @ApiModelProperty(required = true, value = "The e-mail address of the user. Another user with this email must not exist in the application.")
+  @ApiModelProperty(required = true, value = "The e-mail address of the user. Must be unique in the application.")
   @NotNull
 
 @javax.validation.constraints.Email
@@ -101,10 +102,10 @@ public class UserCreationRequest  implements Serializable {
   }
 
   /**
-   * The username of the user. This will appear to other users.
+   * The username of the user. This will appear to other users. Must be unique in the application.
    * @return username
   */
-  @ApiModelProperty(required = true, value = "The username of the user. This will appear to other users.")
+  @ApiModelProperty(required = true, value = "The username of the user. This will appear to other users. Must be unique in the application.")
   @NotNull
 
 @Size(min=3) 
