@@ -59,6 +59,10 @@ dependencies {
 
 }
 
+bootRun {
+	jvmArgs = ["-Djdk.tls.client.protocols=TLSv1.2"]
+}
+
 jacoco {
 	toolVersion = "0.8.5"
 	reportsDir = file("$buildDir/jacoco")
