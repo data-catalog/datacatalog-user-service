@@ -8,9 +8,6 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id "org.openapi.generator" version "4.3.1"
 	id 'jacoco'
-
-	// TODO: remove this if not necessary
-	id 'com.google.cloud.tools.jib' version '2.6.0'
 }
 
 group = 'edu.bbte.projectblueblook'
@@ -86,7 +83,7 @@ task fatJar(type: Jar) {
 
 
 openApiGenerate {
-	inputSpec = "$rootDir/src/main/resources/api/User.yaml".toString()
+	inputSpec = "$rootDir/src/main/resources/api/dist.yaml".toString()
 	configFile = "$rootDir/openapi-generator-config.json".toString()
 	ignoreFileOverride = "$rootDir/.openapi-generator-ignore".toString()
 	outputDir = "$rootDir".toString()

@@ -12,9 +12,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * 
+ * ApiKeyCreationResponse
  */
-@ApiModel(description = "")
 
 public class ApiKeyCreationResponse  implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -11,9 +11,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * 
+ * UserCreationRequest
  */
-@ApiModel(description = "")
 
 public class UserCreationRequest  implements Serializable {
   private static final long serialVersionUID = 1L;
